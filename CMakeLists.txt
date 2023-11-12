@@ -1,8 +1,6 @@
-cmake_minimum_required(VERSION 3.23)
-project(ProjetTG)
+cmake_minimum_required(VERSION 3.25)
+project(ProjetTG C)
 
-set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_C_STANDARD 23)
 
-include_directories(.)
-
-add_executable(ProjetTG niveau.c niveau.h)
+add_executable(ProjetTG main.c)
