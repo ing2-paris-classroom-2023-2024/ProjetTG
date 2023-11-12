@@ -1,4 +1,4 @@
-# Install script for directory: C:/Users/gasni/OneDrive - Groupe INSEEC (POCE)/ING2/Theorie des graphes/Projet/ProjetTG
+# Install script for directory: C:/Users/vadzi/CLionProjects/ProjetTG
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -45,5 +45,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "C:/Users/gasni/OneDrive - Groupe INSEEC (POCE)/ING2/Theorie des graphes/Projet/ProjetTG/cmake-build-debug/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "C:/Users/vadzi/CLionProjects/ProjetTG/cmake-build-debug/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

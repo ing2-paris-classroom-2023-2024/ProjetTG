@@ -1,6 +1,6 @@
 #include <stdio.h>
+#include "Lecture_Fichier.h"
 
 int main() {
-    printf("Hello, World!\n");
-    return 0;
+    lecture_fichier();
 }
