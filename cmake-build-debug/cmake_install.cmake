@@ -1,4 +1,4 @@
-# Install script for directory: C:/Users/vadzi/CLionProjects/ProjetTG
+# Install script for directory: C:/Users/noeld/CLionProjects/ProjetTG2
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -45,5 +45,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "C:/Users/vadzi/CLionProjects/ProjetTG/cmake-build-debug/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "C:/Users/noeld/CLionProjects/ProjetTG2/cmake-build-debug/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

@@ -47,12 +47,11 @@ void printGraph(struct Graph* graph) {
     }
 }
 
-int lecture_fichier() {
+struct Graph* lecture_fichier() {
     FILE *file;
-    file = fopen("precedence.txt", "r");
+    file = fopen("precedences.txt", "r");
     if (file == NULL) {
         printf("Erreur lors de l'ouverture du fichier");
-        return 1;
     }
     int nbArrete = 0;
     int src, dest;
@@ -67,5 +66,5 @@ int lecture_fichier() {
     }
     fclose(file);
     printGraph(graph);
-
+    return graph;
 }

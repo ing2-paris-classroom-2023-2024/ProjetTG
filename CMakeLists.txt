@@ -3,4 +3,8 @@ project(ProjetTG C)
 
 set(CMAKE_C_STANDARD 23)
 
-add_executable(ProjetTG main.c Lecture_Fichier.c)
+add_executable(ProjetTG main.c Lecture_Fichier.c
+
+
+        MatriceNiveau.h
+        MatriceNiveau.c)

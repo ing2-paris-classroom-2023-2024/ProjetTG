@@ -1,4 +1,4 @@
-"C:\Program Files\JetBrains\CLion 2022.2.3\bin\cmake\win\x64\bin\cmake.exe" -DCMAKE_BUILD_TYPE=Debug "-DCMAKE_MAKE_PROGRAM=C:/Program Files/JetBrains/CLion 2022.2.3/bin/ninja/win/x64/ninja.exe" -G Ninja -S C:\Users\vadzi\CLionProjects\ProjetTG -B C:\Users\vadzi\CLionProjects\ProjetTG\cmake-build-debug
--- Configuring done
--- Generating done
--- Build files have been written to: C:/Users/vadzi/CLionProjects/ProjetTG/cmake-build-debug
+"C:\Program Files\JetBrains\CLion 2022.2.3\bin\cmake\win\x64\bin\cmake.exe" -DCMAKE_BUILD_TYPE=Debug "-DCMAKE_MAKE_PROGRAM=C:/Program Files/JetBrains/CLion 2022.2.3/bin/ninja/win/x64/ninja.exe" -G Ninja -S C:\Users\noeld\CLionProjects\ProjetTG2 -B C:\Users\noeld\CLionProjects\ProjetTG2\cmake-build-debug
+-- Configuring done (0.1s)
+-- Generating done (0.0s)
+-- Build files have been written to: C:/Users/noeld/CLionProjects/ProjetTG2/cmake-build-debug

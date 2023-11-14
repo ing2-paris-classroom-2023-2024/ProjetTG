@@ -3,4 +3,5 @@
 
 int main() {
     lecture_fichier();
+
 }
