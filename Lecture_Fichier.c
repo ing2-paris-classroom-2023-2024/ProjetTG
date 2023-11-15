@@ -47,7 +47,7 @@ void printGraph(struct Graph* graph) {
     }
 }
 
-struct Graph* lecture_fichier() {
+struct Graph* initGraph() {
     FILE *file;
     file = fopen("precedences.txt", "r");
     if (file == NULL) {

@@ -20,6 +20,6 @@ struct Graph* CreerGraph(int nbSommet);
 void CreerArrete(struct Graph* graph, int src, int dest);
 int est_un_sommet(struct Graph* graph, int i);
 void printGraph(struct Graph* graph);
-struct Graph* lecture_fichier();
+struct Graph* initGraph();
 
 #endif //PROJETTG_LECTURE_FICHIER_H

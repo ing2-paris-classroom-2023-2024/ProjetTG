@@ -6,6 +6,7 @@
 #include "Lecture_Fichier.h"
 #include <stdbool.h>
 #include <stdlib.h>
+#include <stdio.h>
 
 struct File* creerFile(int taille) {
     struct File* q = malloc(sizeof(struct File));
@@ -125,4 +126,17 @@ int** CreerMatriceNiveaux(struct Graph* graph, int * sommetsDepart, int nbSommet
     }
     free(visited);
     return matriceNiveaux;
+}
+
+void printMatriceNiveaux(int** matriceNiveaux, int nbSommet) {
+    printf("Matrice des niveaux :\n");
+    for (int i = 0; i < nbSommet; ++i) {
+        printf("Niveau %d :", i);
+        for (int j = 0; j < nbSommet; ++j) {
+            if (matriceNiveaux[i][j] != -1) {
+                printf(" %d", matriceNiveaux[i][j]);
+            }
+        }
+        printf("\n");
+    }
 }
