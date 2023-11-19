@@ -100,3 +100,13 @@ void comparerExclusionsAvecMatriceNiveaux(int** matriceNiveaux, int nbSommet, t_
         }
     }
 }
+
+int sont_incompatibles(int sommet1, int sommet2, t_exclusion* exclusions) {
+    for (int i = 0; i < exclusions->nb_paires; i++) {
+        if ((exclusions->paires[i].sommet1 == sommet1 && exclusions->paires[i].sommet2 == sommet2) ||
+            (exclusions->paires[i].sommet1 == sommet2 && exclusions->paires[i].sommet2 == sommet1)) {
+            return 1;
+        }
+    }
+    return 0;
+}

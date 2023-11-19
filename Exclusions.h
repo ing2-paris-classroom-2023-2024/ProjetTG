@@ -19,5 +19,6 @@ t_exclusion* lireExclusions();
 void descendreNiveauxSuivants(int** matriceNiveaux, int nbSommet, int niveauDebut, int sommetADescendre);
 void comparerExclusionsAvecMatriceNiveaux(int** matriceNiveaux, int nbSommet, t_exclusion* exclusions);
 void afficherPaires(t_exclusion* exclusions);
+int sont_incompatibles(int sommet1, int sommet2, t_exclusion* exclusions);
 
 #endif //PROJETTG_EXCLUSIONS_H
