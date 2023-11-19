@@ -7,4 +7,4 @@ add_executable(ProjetTG main.c Lecture_Fichier.c
 
 
         MatriceNiveau.h
-        MatriceNiveau.c)
+        MatriceNiveau.c algo_remplissage.c algo_remplissage.h)

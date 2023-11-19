@@ -49,7 +49,7 @@ void printGraph(struct Graph* graph) {
 
 struct Graph* initGraph() {
     FILE *file;
-    file = fopen("precedences.txt", "r");
+    file = fopen("../precedences.txt", "r");
     if (file == NULL) {
         printf("Erreur lors de l'ouverture du fichier");
     }
@@ -68,3 +68,85 @@ struct Graph* initGraph() {
     printGraph(graph);
     return graph;
 }
+
+int nb_incompatibilites(){
+    FILE *file;
+    file = fopen("../exclusions.txt", "r");
+    if (file == NULL) {
+        printf("Erreur lors de l'ouverture du fichier");
+    }
+    int nbIncompatibilites = 0;
+    int src, dest;
+    while (fscanf(file, "%d %d", &src, &dest) == 2) {
+        nbIncompatibilites++;
+    }
+    fclose(file);
+    return nbIncompatibilites;
+}
+
+int* init_incompatibilites(int nbIncompatibilites){
+    FILE *file;
+    file = fopen("../exclusions.txt", "r");
+    if (file == NULL) {
+        printf("Erreur lors de l'ouverture du fichier");
+    }
+    int src, dest;
+    int** incompatibilites = malloc(nbIncompatibilites * sizeof(int*));
+    for (int i = 0; i < nbIncompatibilites; ++i) {
+        incompatibilites[i] = malloc(2 * sizeof(int));
+    }
+    int i = 0;
+    while (fscanf(file, "%d %d", &src, &dest) == 2) {
+        incompatibilites[i][0] = src;
+        incompatibilites[i][1] = dest;
+        i++;
+    }
+    fclose(file);
+
+    return (int *) incompatibilites;
+}
+
+void print_incompatibilites(int** incompatibilites, int nbIncompatibilites){
+    for (int i = 0; i < nbIncompatibilites; ++i) {
+        printf("%d %d\n", incompatibilites[i][0], incompatibilites[i][1]);
+    }
+}
+
+int nb_operations(){
+    FILE *file;
+    file = fopen("../operations.txt", "r");
+    if (file == NULL) {
+        printf("Erreur lors de l'ouverture du fichier");
+    }
+    int nbOperations = 0;
+    int src, dest;
+    while (fscanf(file, "%d %f", &src, &dest) == 2) {
+        nbOperations++;
+    }
+    fclose(file);
+    return nbOperations;
+}
+
+void init_operations(int nbOperations, int* num_operations, float* duree_operations){
+    FILE *file;
+    file = fopen("../operations.txt", "r"); // Change this line
+    if (file == NULL) {
+        printf("Erreur lors de l'ouverture du fichier");
+    }
+    int src;
+    float dest;
+    int i = 0;
+    while (fscanf(file, "%d %f", &src, &dest) == 2) {
+        num_operations[i] = src;
+        duree_operations[i] = dest;
+        i++;
+    }
+    fclose(file);
+}
+
+void print_operations(int nbOperations, int* num_operations, float* duree_operations){
+    for (int i = 0; i < nbOperations; ++i) {
+        printf("%d %.2f\n", num_operations[i], duree_operations[i]);
+    }
+}
+
