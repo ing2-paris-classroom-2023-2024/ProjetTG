@@ -48,55 +48,66 @@ void afficherPaires(t_exclusion* exclusions) {
     }
 }
 
-
-
-void descendreNiveauxSuivants(int** matriceNiveaux, int nbSommet, int niveauDebut, int sommetADescendre) {
-    // Créer un espace au niveau suivant pour le sommet à descendre
-    for (int i = nbSommet - 2; i >= niveauDebut; i--) {
+void descendreNiveauxSuivants(int*** matriceNiveaux, int* niveau, int nbSommet, int niveauInMat, int sommetADescendre) {
+    // Vérifier et augmenter la taille de la matrice si nécessaire
+    *niveau += 1;
+    *matriceNiveaux = realloc(*matriceNiveaux, (*niveau) * sizeof(int*));
+    (*matriceNiveaux)[*niveau - 1] = malloc(nbSommet * sizeof(int));
+    for (int j = 0; j < nbSommet; j++) {
+        (*matriceNiveaux)[*niveau - 1][j] = -1;
+    }
+    // Décaler les niveaux
+    for (int i = *niveau - 2; i > niveauInMat; i--) {
         for (int j = 0; j < nbSommet; j++) {
-            matriceNiveaux[i + 1][j] = matriceNiveaux[i][j];
+            (*matriceNiveaux)[i + 1][j] = (*matriceNiveaux)[i][j];
         }
     }
 
-    // Initialiser le niveau juste en dessous de niveauDebut
+    // Initialiser le niveau juste en dessous de niveauInMat
     for (int j = 0; j < nbSommet; j++) {
-        matriceNiveaux[niveauDebut + 1][j] = -1;
+        (*matriceNiveaux)[niveauInMat + 1][j] = -1;
     }
 
-    // Déplacer le sommetADescendre au niveau suivant
+    // Déplacer le sommet au niveau suivant
     for (int j = 0; j < nbSommet; j++) {
-        if (matriceNiveaux[niveauDebut][j] == sommetADescendre) {
-            matriceNiveaux[niveauDebut][j] = -1;
+        if ((*matriceNiveaux)[niveauInMat][j] == sommetADescendre) {
+            (*matriceNiveaux)[niveauInMat][j] = -1;
             break;
         }
     }
 
+    // Ajouter le sommet au niveau suivant
     for (int j = 0; j < nbSommet; j++) {
-        if (matriceNiveaux[niveauDebut + 1][j] == -1) {
-            matriceNiveaux[niveauDebut + 1][j] = sommetADescendre;
+        if ((*matriceNiveaux)[niveauInMat + 1][j] == -1) {
+            (*matriceNiveaux)[niveauInMat + 1][j] = sommetADescendre;
             break;
         }
     }
 }
 
 
-void comparerExclusionsAvecMatriceNiveaux(int** matriceNiveaux, int nbSommet, t_exclusion* exclusions) {
+
+void comparerExclusionsAvecMatriceNiveaux(int*** matriceNiveaux, int* niveau, int nbSommet, t_exclusion* exclusions) {
     for (int i = 0; i < exclusions->nb_paires; i++) {
         int sommet1 = exclusions->paires[i].sommet1;
         int sommet2 = exclusions->paires[i].sommet2;
         int niveauSommet1 = -1, niveauSommet2 = -1;
+
         // Trouver les niveaux des deux sommets
-        for (int j = 0; j < nbSommet; j++) {
+        for (int j = 0; j < *niveau; j++) {
             for (int k = 0; k < nbSommet; k++) {
-                if (matriceNiveaux[j][k] == sommet1) niveauSommet1 = j;
-                if (matriceNiveaux[j][k] == sommet2) niveauSommet2 = j;
+                if ((*matriceNiveaux)[j][k] == sommet1) niveauSommet1 = j;
+                if ((*matriceNiveaux)[j][k] == sommet2) niveauSommet2 = j;
             }
         }
+
         // Si les deux sommets sont au même niveau, descendre l'un d'eux
-        if (niveauSommet1 != -1 && niveauSommet1 == niveauSommet2 && niveauSommet1 != nbSommet - 1)
-        {
-            if (sommet1>sommet2) {descendreNiveauxSuivants(matriceNiveaux, nbSommet, niveauSommet1, sommet1);}
-            else descendreNiveauxSuivants(matriceNiveaux, nbSommet, niveauSommet1, sommet2);;
+        if (niveauSommet1 != -1 && niveauSommet1 == niveauSommet2) {
+            if (sommet1 > sommet2) {
+                descendreNiveauxSuivants(matriceNiveaux, niveau, nbSommet, niveauSommet1, sommet1);
+            } else {
+                descendreNiveauxSuivants(matriceNiveaux, niveau, nbSommet, niveauSommet1, sommet2);
+            }
         }
     }
 }

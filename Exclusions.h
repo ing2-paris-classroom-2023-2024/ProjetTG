@@ -16,8 +16,8 @@ typedef struct {
 } t_exclusion;
 
 t_exclusion* lireExclusions();
-void descendreNiveauxSuivants(int** matriceNiveaux, int nbSommet, int niveauDebut, int sommetADescendre);
-void comparerExclusionsAvecMatriceNiveaux(int** matriceNiveaux, int nbSommet, t_exclusion* exclusions);
+void descendreNiveauxSuivants(int*** matriceNiveaux, int* niveau, int nbSommet, int niveauInMat, int sommetADescendre);
+void comparerExclusionsAvecMatriceNiveaux(int*** matriceNiveaux, int* niveau, int nbSommet, t_exclusion* exclusions);
 void afficherPaires(t_exclusion* exclusions);
 int sont_incompatibles(int sommet1, int sommet2, t_exclusion* exclusions);
 
