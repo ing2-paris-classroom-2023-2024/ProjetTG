@@ -90,8 +90,7 @@ bool estPrecedentALigne(struct Graph* graph, int sommet, int** matriceNiveaux, i
 
 void descendreNiveauxSuivants(struct Graph* g,int*** matriceNiveaux, int* niveau, int nbSommet, int niveauDebut, int sommetADescendre) {
     // Vérifier et augmenter la taille de la matrice si nécessaire
-    if(!estPrecedentALigne(g, sommetADescendre, *matriceNiveaux, niveauDebut+1, nbSommet)){
-        printf("\n%d, %d", sommetADescendre, niveauDebut);
+    if(estPrecedentALigne(g, sommetADescendre, *matriceNiveaux, niveauDebut+1, nbSommet)){
         *niveau += 1;
         *matriceNiveaux = realloc(*matriceNiveaux, (*niveau) * sizeof(int*));
         (*matriceNiveaux)[*niveau - 1] = malloc(nbSommet * sizeof(int));
