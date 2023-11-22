@@ -10,13 +10,16 @@ int main(){
     int nb_sommets_depart=0;
     int * sommetsDepart = TrouverSommetsDepart(graphe, &nb_sommets_depart);
     int** matriceNiveaux = malloc(graphe->nbSommet * sizeof(int*));
+
     int* niveau = CreerMatriceNiveaux(graphe, sommetsDepart, nb_sommets_depart, matriceNiveaux);
     printf("\nMatrice des niveaux :\n\n");
     printMatriceNiveaux(matriceNiveaux, graphe->nbSommet, *niveau);
-
+    for(int k=0;k<graphe->nbSommet;k++){
+        estPrecedentALigne(graphe, 6,matriceNiveaux,1,graphe->nbSommet);
+    }
     t_exclusion * exclusions = lireExclusions();
     //afficherPaires(exclusions);
-    comparerExclusionsAvecMatriceNiveaux(&matriceNiveaux,niveau, graphe->nbSommet, exclusions);
+    comparerExclusionsAvecMatriceNiveaux(graphe, &matriceNiveaux,niveau, graphe->nbSommet, exclusions);
     printf("\nMatrice des niveaux avec exclusions :\n\n");
     printMatriceNiveaux(matriceNiveaux, graphe->nbSommet, *niveau);
     //printf("%d",sont_incompatibles(1, 4, exclusions));
@@ -34,5 +37,4 @@ int main(){
     free(graphe);
     free(matriceNiveaux);
     return 0;
-
 }

@@ -3,8 +3,10 @@
 //
 
 #include "Exclusions.h"
+#include "Lecture_Fichier.h"
 #include <stdlib.h>
 #include <stdio.h>
+#include <stdbool.h>
 
 
 t_exclusion* lireExclusions() {
@@ -48,38 +50,77 @@ void afficherPaires(t_exclusion* exclusions) {
     }
 }
 
-void descendreNiveauxSuivants(int*** matriceNiveaux, int* niveau, int nbSommet, int niveauInMat, int sommetADescendre) {
-    // Vérifier et augmenter la taille de la matrice si nécessaire
-    *niveau += 1;
-    *matriceNiveaux = realloc(*matriceNiveaux, (*niveau) * sizeof(int*));
-    (*matriceNiveaux)[*niveau - 1] = malloc(nbSommet * sizeof(int));
-    for (int j = 0; j < nbSommet; j++) {
-        (*matriceNiveaux)[*niveau - 1][j] = -1;
+bool dfs(struct Graph* graph, int start, int end, bool visited[]) {
+    if (start == end) return true;
+
+    visited[start] = true;
+    struct Mat_adj* temp = graph->adjList[start];
+    while (temp != NULL) {
+        int adjVertex = temp->data;
+        if (!visited[adjVertex]) {
+            if (dfs(graph, adjVertex, end, visited)) return true;
+        }
+        temp = temp->next;
     }
-    // Décaler les niveaux
-    for (int i = *niveau - 2; i > niveauInMat; i--) {
-        for (int j = 0; j < nbSommet; j++) {
-            (*matriceNiveaux)[i + 1][j] = (*matriceNiveaux)[i][j];
+    return false;
+}
+
+bool estPrecedent(struct Graph* graph, int sommet1, int sommet2) {
+    bool* visited = (bool*)malloc(graph->nbSommet * sizeof(bool));
+    for (int i = 0; i < graph->nbSommet; ++i) {
+        visited[i] = false;
+    }
+
+    bool result = dfs(graph, sommet1, sommet2, visited);
+    free(visited);
+    return result;
+}
+
+bool estPrecedentALigne(struct Graph* graph, int sommet, int** matriceNiveaux, int ligneIndex, int nbSommets) {
+    for (int i = 0; i < nbSommets; ++i) {
+        int sommetLigne = matriceNiveaux[ligneIndex][i];
+        if (sommetLigne != -1 && estPrecedent(graph, sommet, sommetLigne)) {
+            return true; // `sommet` est précédent à au moins un sommet dans la ligne
         }
     }
+    return false; // `sommet` n'est précédent à aucun sommet dans la ligne
+}
 
-    // Initialiser le niveau juste en dessous de niveauInMat
-    for (int j = 0; j < nbSommet; j++) {
-        (*matriceNiveaux)[niveauInMat + 1][j] = -1;
+
+
+void descendreNiveauxSuivants(struct Graph* g,int*** matriceNiveaux, int* niveau, int nbSommet, int niveauDebut, int sommetADescendre) {
+    // Vérifier et augmenter la taille de la matrice si nécessaire
+    if(!estPrecedentALigne(g, sommetADescendre, *matriceNiveaux, niveauDebut+1, nbSommet)){
+        printf("\n%d, %d", sommetADescendre, niveauDebut);
+        *niveau += 1;
+        *matriceNiveaux = realloc(*matriceNiveaux, (*niveau) * sizeof(int*));
+        (*matriceNiveaux)[*niveau - 1] = malloc(nbSommet * sizeof(int));
+        for (int j = 0; j < nbSommet; j++) {
+            (*matriceNiveaux)[*niveau - 1][j] = -1;
+        }
+        // Décaler les niveaux
+        for (int i = *niveau - 2; i > niveauDebut; i--) {
+            for (int j = 0; j < nbSommet; j++) {
+                (*matriceNiveaux)[i + 1][j] = (*matriceNiveaux)[i][j];
+            }
+        }
+        // Initialiser le niveau juste en dessous de niveauDebut
+        for (int j = 0; j < nbSommet; j++) {
+            (*matriceNiveaux)[niveauDebut + 1][j] = -1;
+        }
     }
-
     // Déplacer le sommet au niveau suivant
     for (int j = 0; j < nbSommet; j++) {
-        if ((*matriceNiveaux)[niveauInMat][j] == sommetADescendre) {
-            (*matriceNiveaux)[niveauInMat][j] = -1;
+        if ((*matriceNiveaux)[niveauDebut][j] == sommetADescendre) {
+            (*matriceNiveaux)[niveauDebut][j] = -1;
             break;
         }
     }
 
     // Ajouter le sommet au niveau suivant
     for (int j = 0; j < nbSommet; j++) {
-        if ((*matriceNiveaux)[niveauInMat + 1][j] == -1) {
-            (*matriceNiveaux)[niveauInMat + 1][j] = sommetADescendre;
+        if ((*matriceNiveaux)[niveauDebut + 1][j] == -1) {
+            (*matriceNiveaux)[niveauDebut + 1][j] = sommetADescendre;
             break;
         }
     }
@@ -87,7 +128,7 @@ void descendreNiveauxSuivants(int*** matriceNiveaux, int* niveau, int nbSommet, 
 
 
 
-void comparerExclusionsAvecMatriceNiveaux(int*** matriceNiveaux, int* niveau, int nbSommet, t_exclusion* exclusions) {
+void comparerExclusionsAvecMatriceNiveaux(struct Graph* g, int*** matriceNiveaux, int* niveau, int nbSommet, t_exclusion* exclusions) {
     for (int i = 0; i < exclusions->nb_paires; i++) {
         int sommet1 = exclusions->paires[i].sommet1;
         int sommet2 = exclusions->paires[i].sommet2;
@@ -104,13 +145,19 @@ void comparerExclusionsAvecMatriceNiveaux(int*** matriceNiveaux, int* niveau, in
         // Si les deux sommets sont au même niveau, descendre l'un d'eux
         if (niveauSommet1 != -1 && niveauSommet1 == niveauSommet2) {
             if (sommet1 > sommet2) {
-                descendreNiveauxSuivants(matriceNiveaux, niveau, nbSommet, niveauSommet1, sommet1);
+                descendreNiveauxSuivants(g, matriceNiveaux, niveau, nbSommet, niveauSommet1, sommet1);
             } else {
-                descendreNiveauxSuivants(matriceNiveaux, niveau, nbSommet, niveauSommet1, sommet2);
+                descendreNiveauxSuivants(g, matriceNiveaux, niveau, nbSommet, niveauSommet1, sommet2);
             }
         }
     }
 }
+
+
+
+
+
+
 
 int sont_incompatibles(int sommet1, int sommet2, t_exclusion* exclusions) {
     for (int i = 0; i < exclusions->nb_paires; i++) {

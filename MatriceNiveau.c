@@ -73,8 +73,8 @@ int* TrouverSommetsDepart(struct Graph* graph, int * nbSommetsDepart) {
     return sommetsDeparts;
 }
 
-// Fonction pour créer la matrice de niveaux
-int *CreerMatriceNiveaux(struct Graph* graph, int * sommetsDepart, int nbSommetsDeparts, int** matriceNiveaux) {
+
+int* CreerMatriceNiveaux(struct Graph* graph, int * sommetsDepart, int nbSommetsDeparts, int** matriceNiveaux) {
 
     for (int i = 0; i < graph->nbSommet; ++i) {
         matriceNiveaux[i] = malloc(graph->nbSommet * sizeof(int));
@@ -139,3 +139,4 @@ void printMatriceNiveaux(int** matriceNiveaux, int nbSommet, int niveau) {
         printf("\n");
     }
 }
+

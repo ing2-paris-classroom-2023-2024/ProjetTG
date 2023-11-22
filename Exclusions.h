@@ -4,6 +4,8 @@
 
 #ifndef PROJETTG_EXCLUSIONS_H
 #define PROJETTG_EXCLUSIONS_H
+#include "Lecture_Fichier.h"
+#include <stdbool.h>
 
 typedef struct {
     int sommet1;
@@ -16,8 +18,12 @@ typedef struct {
 } t_exclusion;
 
 t_exclusion* lireExclusions();
-void descendreNiveauxSuivants(int*** matriceNiveaux, int* niveau, int nbSommet, int niveauInMat, int sommetADescendre);
-void comparerExclusionsAvecMatriceNiveaux(int*** matriceNiveaux, int* niveau, int nbSommet, t_exclusion* exclusions);
+void descendreNiveauxSuivants(struct Graph* g,int*** matriceNiveaux, int* niveau, int nbSommet, int niveauInMat, int sommetADescendre);
+void comparerExclusionsAvecMatriceNiveaux(struct Graph* g, int*** matriceNiveaux, int* niveau, int nbSommet, t_exclusion* exclusions);
+bool estPrecedentALigne(struct Graph* graph, int sommet, int** matriceNiveaux, int ligneIndex, int nbSommets);
+bool estPrecedent(struct Graph* graph, int sommet1, int sommet2) ;
+bool dfs(struct Graph* graph, int start, int end, bool visited[]);
+
 void afficherPaires(t_exclusion* exclusions);
 int sont_incompatibles(int sommet1, int sommet2, t_exclusion* exclusions);
 
