@@ -22,8 +22,8 @@ int main(){
     comparerExclusionsAvecMatriceNiveaux(graphe, &matriceNiveaux,niveau, graphe->nbSommet, exclusions);
     printf("\nMatrice des niveaux avec exclusions :\n\n");
     printMatriceNiveaux(matriceNiveaux, graphe->nbSommet, *niveau);
-    //printf("%d",sont_incompatibles(1, 4, exclusions));
-    int nbOperations = nb_operations();
+    //printf("\n%d",sont_incompatibles(1, 4, exclusions));
+    /*int nbOperations = nb_operations();
     int* num_operations = malloc(nbOperations * sizeof(int));
     float* duree_operations = malloc(nbOperations * sizeof(float));
     init_operations(nbOperations, num_operations, duree_operations);
@@ -32,7 +32,7 @@ int main(){
 
     //free(incompatibilites);
     free(num_operations);
-    free(duree_operations);
+    free(duree_operations);*/
     free(sommetsDepart);
     free(graphe);
     free(matriceNiveaux);

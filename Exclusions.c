@@ -154,10 +154,6 @@ void comparerExclusionsAvecMatriceNiveaux(struct Graph* g, int*** matriceNiveaux
 
 
 
-
-
-
-
 int sont_incompatibles(int sommet1, int sommet2, t_exclusion* exclusions) {
     for (int i = 0; i < exclusions->nb_paires; i++) {
         if ((exclusions->paires[i].sommet1 == sommet1 && exclusions->paires[i].sommet2 == sommet2) ||

@@ -135,8 +135,9 @@ void printMatriceNiveaux(int** matriceNiveaux, int nbSommet, int niveau) {
             if (matriceNiveaux[i][j] != -1) {
                 printf(" %d", matriceNiveaux[i][j]);
             }
-        }
-        printf("\n");
-    }
-}
 
+        } printf("\n");
+
+    }
+
+}
