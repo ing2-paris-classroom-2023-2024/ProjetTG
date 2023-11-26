@@ -5,9 +5,11 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include "Lecture_Fichier.h"
+
 struct Mat_adj* Creer_noeud(int value) {
     struct Mat_adj* noeud = (struct Mat_adj*)malloc(sizeof(struct Mat_adj));
     noeud->data = value;
+    noeud->poids = -1;
     noeud->next = NULL;
     return noeud;
 }
@@ -16,7 +18,6 @@ struct Graph* CreerGraph(int nbSommet) {
     struct Graph* graph = (struct Graph*)malloc(sizeof(struct Graph));
     graph->nbSommet = nbSommet;
     graph->adjList = (struct Mat_adj**)malloc(nbSommet * sizeof(struct Mat_adj*));
-
     for (int i = 0; i < nbSommet; ++i){
         graph->adjList[i] = NULL;
     }
@@ -38,9 +39,9 @@ void printGraph(struct Graph* graph) {
     for (int i = 0; i < graph->nbSommet; ++i) {
         if (!est_un_sommet(graph, i)) continue;
         struct Mat_adj* adj= graph->adjList[i];
-        printf("Sommets adjacents à %d :", i);
+        printf("Sommets adjacents a %d :", i);
         while (adj != NULL) {
-            printf(" %d", adj->data);
+            printf(" %d (%f)", adj->data, adj->poids);
             adj = adj->next;
         }
         printf("\n");
@@ -127,22 +128,36 @@ int nb_operations(){
     return nbOperations;
 }
 
-void init_operations(int nbOperations, int* num_operations, float* duree_operations){
-    FILE *file;
-    file = fopen("../operations.txt", "r"); // Change this line
+void init_operations(int nbOperations, int* num_operations, float* duree_operations, struct Graph* g) {
+    FILE* file;
+    file = fopen("../operations.txt", "r");
     if (file == NULL) {
         printf("Erreur lors de l'ouverture du fichier");
     }
     int src;
     float dest;
     int i = 0;
+
     while (fscanf(file, "%d %f", &src, &dest) == 2) {
         num_operations[i] = src;
         duree_operations[i] = dest;
         i++;
+
+        // Parcours des listes d'adjacence du graphe
+        for (int j = 0; j < g->nbSommet; ++j) {
+            struct Mat_adj* temp = g->adjList[j];
+            while (temp != NULL) {
+                if (temp->data == src) {
+                    temp->poids = dest;
+                    break; // Vous pouvez sortir de la boucle une fois que vous avez trouvé le nœud correspondant
+                }
+                temp = temp->next;
+            }
+        }
     }
     fclose(file);
 }
+
 
 void print_operations(int nbOperations, int* num_operations, float* duree_operations){
     for (int i = 0; i < nbOperations; ++i) {

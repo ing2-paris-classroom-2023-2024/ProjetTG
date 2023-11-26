@@ -7,6 +7,7 @@
 
 struct Mat_adj {
     int data;
+    float poids;
     struct Mat_adj* next;
 };
 
@@ -25,7 +26,7 @@ int nb_incompatibilites();
 int* init_incompatibilites(int nbIncompatibilites);
 void print_incompatibilites(int** incompatibilites, int nbIncompatibilites);
 int nb_operations();
-void init_operations(int nbOperations, int* num_operations, float* duree_operations);
+void init_operations(int nbOperations, int* num_operations, float* duree_operations, struct Graph* g);
 void print_operations(int nbOperations, int* num_operations, float* duree_operations);
 
 #endif //PROJETTG_LECTURE_FICHIER_H

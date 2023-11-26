@@ -5,17 +5,26 @@
 #ifndef PROJETTG_MATRICENIVEAU_H
 #define PROJETTG_MATRICENIVEAU_H
 #include "Lecture_Fichier.h"
+
+typedef struct{
+    int som;
+    float poids;
+}Sommet;
+
 struct File {
-    int* elements;
+    Sommet* elements;
     int tete;
     int queue;
     int taille;
 };
 
-int dequeue(struct File* q);
-void FilePleine(struct File* q, int element);
+
+
+
+Sommet dequeue(struct File* q);
+void FilePleine(struct File* q, Sommet element);
 int* TrouverSommetsDepart(struct Graph* graph, int * nbSommetsDepart);
-int *CreerMatriceNiveaux(struct Graph* graph, int * sommetsDepart, int nbSommetsDeparts, int** matriceNiveaux);
-void printMatriceNiveaux(int** matriceNiveaux, int nbSommet, int niveau);
+int* CreerMatriceNiveaux(struct Graph* graph, int * sommetsDepart, int nbSommetsDeparts, Sommet*** matriceNiveaux);
+void printMatriceNiveaux(Sommet ** matriceNiveaux, int nbSommet, int niveau);
 
 #endif //PROJETTG_MATRICENIVEAU_H

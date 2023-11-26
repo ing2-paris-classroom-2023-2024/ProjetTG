@@ -10,21 +10,24 @@
 
 struct File* creerFile(int taille) {
     struct File* q = malloc(sizeof(struct File));
-    q->elements = malloc(taille * sizeof(int));
+    q->elements = malloc(taille * sizeof(Sommet));
     q->tete = -1;
     q->queue = -1;
     q->taille = taille;
     return q;
 }
 
+
 bool FileVide(struct File* q) {
     return q->queue == -1;
 }
 
-int dequeue(struct File* q) {
-    int element;
+Sommet dequeue(struct File* q) {
+    Sommet element;
     if (FileVide(q)) {
-        return -1;
+        element.som = -1;  // Ou une autre valeur par défaut
+        element.poids = 0; // Ou une autre valeur par défaut
+        return element;
     }
     element = q->elements[q->tete];
     q->tete++;
@@ -34,7 +37,7 @@ int dequeue(struct File* q) {
     return element;
 }
 
-void FilePleine(struct File* q, int element) {
+void FilePleine(struct File* q, Sommet element) {
     if (q->queue == q->taille - 1) {
         return;
     }
@@ -44,6 +47,7 @@ void FilePleine(struct File* q, int element) {
     q->queue++;
     q->elements[q->queue] = element;
 }
+
 
 int* TrouverSommetsDepart(struct Graph* graph, int * nbSommetsDepart) {
     bool* estDestination = calloc(graph->nbSommet, sizeof(bool));
@@ -74,14 +78,18 @@ int* TrouverSommetsDepart(struct Graph* graph, int * nbSommetsDepart) {
 }
 
 
-int* CreerMatriceNiveaux(struct Graph* graph, int * sommetsDepart, int nbSommetsDeparts, int** matriceNiveaux) {
-
+int* CreerMatriceNiveaux(struct Graph* graph, int * sommetsDepart, int nbSommetsDeparts, Sommet*** matriceNiveaux) {
+    // Allouer de l'espace pour la matrice de structures Sommet
+    (*matriceNiveaux) = malloc(graph->nbSommet * sizeof(Sommet *));
     for (int i = 0; i < graph->nbSommet; ++i) {
-        matriceNiveaux[i] = malloc(graph->nbSommet * sizeof(int));
+        (*matriceNiveaux)[i] = malloc(graph->nbSommet * sizeof(Sommet));
         for (int j = 0; j < graph->nbSommet; ++j) {
-            matriceNiveaux[i][j] = -1;
+            // Initialisez les valeurs de la structure Sommet si nécessaire
+            (*matriceNiveaux)[i][j].som = -1;
+            (*matriceNiveaux)[i][j].poids = 0; // Par exemple, initialisez le poids à 0
         }
     }
+
     bool* visited = malloc(graph->nbSommet * sizeof(bool));
     for (int i = 0; i < graph->nbSommet; ++i) {
         visited[i] = false;
@@ -89,33 +97,43 @@ int* CreerMatriceNiveaux(struct Graph* graph, int * sommetsDepart, int nbSommets
     struct File* q = creerFile(graph->nbSommet);
     // Choisissez un sommet de départ, ici nous choisissons 0
     for (int i = 0; i < nbSommetsDeparts; ++i) {
-        FilePleine(q, sommetsDepart[i]);
+        Sommet sommet;
+        sommet.som = sommetsDepart[i];
+        sommet.poids = 0; // Initialisation du poids à 0, vous pouvez le modifier si nécessaire
+        FilePleine(q, sommet);
         visited[sommetsDepart[i]] = true;
     }
     int* predecesseurs = calloc(graph->nbSommet, sizeof(int));
 
-// Parcourir toutes les arêtes pour compter les prédécesseurs
+    // Parcourir toutes les arêtes pour compter les prédécesseurs
     for (int i = 0; i < graph->nbSommet; ++i) {
         struct Mat_adj* temp = graph->adjList[i];
         while (temp != NULL) {
             predecesseurs[temp->data]++;
             temp = temp->next;
+
         }
     }
-    int *niveau = malloc(sizeof (int));
+    int* niveau = malloc(sizeof(int));
+    *niveau = 0;
     int matriceIndex = 0;
     while (!FileVide(q)) {
         int size = q->queue - q->tete + 1;
         for (int i = 0; i < size; ++i) {
-            int sommet = dequeue(q);
-            matriceNiveaux[*niveau][matriceIndex++] = sommet;
-            struct Mat_adj* temp = graph->adjList[sommet];
+            Sommet sommet = dequeue(q);
+            (*matriceNiveaux)[*niveau][matriceIndex] = sommet;
+            matriceIndex++;
+
+            struct Mat_adj* temp = graph->adjList[sommet.som];
             while (temp) {
                 int adjSommet = temp->data;
                 predecesseurs[adjSommet]--;
                 if (predecesseurs[adjSommet] == 0 && !visited[adjSommet]) {
                     visited[adjSommet] = true;
-                    FilePleine(q, adjSommet);
+                    Sommet adj;
+                    adj.som = adjSommet;
+                    adj.poids = temp->poids; // Récupérez le poids depuis la structure de graphe
+                    FilePleine(q, adj);
                 }
                 temp = temp->next;
             }
@@ -127,13 +145,18 @@ int* CreerMatriceNiveaux(struct Graph* graph, int * sommetsDepart, int nbSommets
     return niveau;
 }
 
-void printMatriceNiveaux(int** matriceNiveaux, int nbSommet, int niveau) {
+
+
+
+
+
+void printMatriceNiveaux(Sommet ** matriceNiveaux, int nbSommet, int niveau) {
     printf("Matrice des niveaux :\n");
     for (int i = 0; i < niveau; ++i) {
         printf("Niveau %d :", i);
         for (int j = 0; j < nbSommet; ++j) {
-            if (matriceNiveaux[i][j] != -1) {
-                printf(" %d", matriceNiveaux[i][j]);
+            if (matriceNiveaux[i][j].som != -1) {
+                printf(" %d (%f)", matriceNiveaux[i][j].som, matriceNiveaux[i][j].poids );
             }
 
         } printf("\n");

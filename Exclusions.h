@@ -5,7 +5,10 @@
 #ifndef PROJETTG_EXCLUSIONS_H
 #define PROJETTG_EXCLUSIONS_H
 #include "Lecture_Fichier.h"
+#include "MatriceNiveau.h"
 #include <stdbool.h>
+#include <stdlib.h>
+#include <stdio.h>
 
 typedef struct {
     int sommet1;
@@ -17,10 +20,11 @@ typedef struct {
     int nb_paires;
 } t_exclusion;
 
+
 t_exclusion* lireExclusions();
-void descendreNiveauxSuivants(struct Graph* g,int*** matriceNiveaux, int* niveau, int nbSommet, int niveauInMat, int sommetADescendre);
-void comparerExclusionsAvecMatriceNiveaux(struct Graph* g, int*** matriceNiveaux, int* niveau, int nbSommet, t_exclusion* exclusions);
-bool estPrecedentALigne(struct Graph* graph, int sommet, int** matriceNiveaux, int ligneIndex, int nbSommets);
+void descendreNiveauxSuivants(struct Graph* g, Sommet**** matriceNiveaux, int* niveau, int nbSommet, int niveauDebut, int sommetADescendre);
+void comparerExclusionsAvecMatriceNiveaux(struct Graph* g, Sommet*** matriceNiveaux, int* niveau, int nbSommet, t_exclusion* exclusions);
+bool estPrecedentALigne(struct Graph* graph, int sommet, Sommet** matriceNiveaux, int ligneIndex, int nbSommets);
 bool estPrecedent(struct Graph* graph, int sommet1, int sommet2) ;
 bool dfs(struct Graph* graph, int start, int end, bool visited[]);
 
