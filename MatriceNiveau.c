@@ -49,7 +49,7 @@ void FilePleine(struct File* q, Sommet element) {
 }
 
 
-int* TrouverSommetsDepart(struct Graph* graph, int * nbSommetsDepart) {
+Sommet* TrouverSommetsDepart(struct Graph* graph, int * nbSommetsDepart) {
     bool* estDestination = calloc(graph->nbSommet, sizeof(bool));
     for (int i = 0; i < graph->nbSommet; ++i) {
         struct Mat_adj* temp = graph->adjList[i];
@@ -66,11 +66,12 @@ int* TrouverSommetsDepart(struct Graph* graph, int * nbSommetsDepart) {
             (*nbSommetsDepart)++;
         }
     }
-    int* sommetsDeparts = malloc(*nbSommetsDepart * sizeof(int));
+    Sommet* sommetsDeparts = malloc(*nbSommetsDepart * sizeof(Sommet));
     int index = 0;
     for (int i = 0; i < graph->nbSommet; ++i) {
         if (!estDestination[i] && graph->adjList[i] != NULL) {
-            sommetsDeparts[index++] = i;
+            sommetsDeparts[index++].som = i;
+            sommetsDeparts[index].poids =0;
         }
     }
     free(estDestination);
@@ -78,7 +79,7 @@ int* TrouverSommetsDepart(struct Graph* graph, int * nbSommetsDepart) {
 }
 
 
-int* CreerMatriceNiveaux(struct Graph* graph, int * sommetsDepart, int nbSommetsDeparts, Sommet*** matriceNiveaux) {
+int* CreerMatriceNiveaux(struct Graph* graph, Sommet * sommetsDepart, int nbSommetsDeparts, Sommet*** matriceNiveaux) {
     // Allouer de l'espace pour la matrice de structures Sommet
     (*matriceNiveaux) = malloc(graph->nbSommet * sizeof(Sommet *));
     for (int i = 0; i < graph->nbSommet; ++i) {
@@ -94,14 +95,29 @@ int* CreerMatriceNiveaux(struct Graph* graph, int * sommetsDepart, int nbSommets
     for (int i = 0; i < graph->nbSommet; ++i) {
         visited[i] = false;
     }
+    FILE* file;
+    file = fopen("../operations.txt", "r");
+    if (file == NULL) {
+        printf("Erreur lors de l'ouverture du fichier");
+    }
+    int src;
+    float dest;
+    while (fscanf(file, "%d %f", &src, &dest) == 2) {
+        for (int i=0;i<nbSommetsDeparts;i++){
+            if (src==sommetsDepart[i].som){
+                sommetsDepart[i].poids=dest;
+            }
+        }
+    }
+    fclose(file);
+
     struct File* q = creerFile(graph->nbSommet);
     // Choisissez un sommet de départ, ici nous choisissons 0
-    for (int i = 0; i < nbSommetsDeparts; ++i) {
+    for (int i = 0; i < nbSommetsDeparts; i++) {
         Sommet sommet;
-        sommet.som = sommetsDepart[i];
-        sommet.poids = 0; // Initialisation du poids à 0, vous pouvez le modifier si nécessaire
+        sommet = sommetsDepart[i];; // Initialisation du poids à 0, vous pouvez le modifier si nécessaire
         FilePleine(q, sommet);
-        visited[sommetsDepart[i]] = true;
+        visited[sommetsDepart[i].som] = true;
     }
     int* predecesseurs = calloc(graph->nbSommet, sizeof(int));
 
@@ -119,7 +135,7 @@ int* CreerMatriceNiveaux(struct Graph* graph, int * sommetsDepart, int nbSommets
     int matriceIndex = 0;
     while (!FileVide(q)) {
         int size = q->queue - q->tete + 1;
-        for (int i = 0; i < size; ++i) {
+        for (int i = 0; i < size; i++) {
             Sommet sommet = dequeue(q);
             (*matriceNiveaux)[*niveau][matriceIndex] = sommet;
             matriceIndex++;
@@ -134,6 +150,7 @@ int* CreerMatriceNiveaux(struct Graph* graph, int * sommetsDepart, int nbSommets
                     adj.som = adjSommet;
                     adj.poids = temp->poids; // Récupérez le poids depuis la structure de graphe
                     FilePleine(q, adj);
+
                 }
                 temp = temp->next;
             }

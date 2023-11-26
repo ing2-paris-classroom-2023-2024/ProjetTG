@@ -11,7 +11,7 @@ int main(){
     float* duree_operations = malloc(nbOperations * sizeof(float));
     struct Graph* graphe = initGraph();
     int nb_sommets_depart=0;
-    int * sommetsDepart = TrouverSommetsDepart(graphe, &nb_sommets_depart);
+    Sommet * sommetsDepart = TrouverSommetsDepart(graphe, &nb_sommets_depart);
     printf("\n\nOperations :\n\n");
     init_operations(nbOperations, num_operations, duree_operations, graphe);
     printGraph(graphe);

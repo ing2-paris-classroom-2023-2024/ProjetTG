@@ -20,11 +20,11 @@ struct File {
 
 
 
-
+struct File* creerFile(int taille);
 Sommet dequeue(struct File* q);
 void FilePleine(struct File* q, Sommet element);
-int* TrouverSommetsDepart(struct Graph* graph, int * nbSommetsDepart);
-int* CreerMatriceNiveaux(struct Graph* graph, int * sommetsDepart, int nbSommetsDeparts, Sommet*** matriceNiveaux);
+Sommet* TrouverSommetsDepart(struct Graph* graph, int * nbSommetsDepart);
+int* CreerMatriceNiveaux(struct Graph* graph, Sommet * sommetsDepart, int nbSommetsDeparts, Sommet*** matriceNiveaux);
 void printMatriceNiveaux(Sommet ** matriceNiveaux, int nbSommet, int niveau);
 
 #endif //PROJETTG_MATRICENIVEAU_H
