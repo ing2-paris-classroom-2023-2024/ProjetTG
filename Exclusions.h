@@ -22,12 +22,11 @@ typedef struct {
 
 
 t_exclusion* lireExclusions();
-void descendreNiveauxSuivants(struct Graph* g, Sommet**** matriceNiveaux, int* niveau, int nbSommet, int niveauDebut, int sommetADescendre);
-void comparerExclusionsAvecMatriceNiveaux(struct Graph* g, Sommet*** matriceNiveaux, int* niveau, int nbSommet, t_exclusion* exclusions);
-bool estPrecedentALigne(struct Graph* graph, int sommet, Sommet** matriceNiveaux, int ligneIndex, int nbSommets);
-bool estPrecedent(struct Graph* graph, int sommet1, int sommet2) ;
+void descendreNiveauxSuivants(struct Graph* g, int*** matriceNiveaux, int* niveau, int nbSommet, int niveauDebut, int sommetADescendre);
+void comparerExclusionsAvecMatriceNiveaux(struct Graph* g, int*** matriceNiveaux, int* niveau, int nbSommet, t_exclusion* exclusions);
+bool estPrecedentALigne(struct Graph* graph, int sommet, int** matriceNiveaux, int ligneIndex, int nbSommets);
+bool estPrecedent(struct Graph* graph, int sommet1, int sommet2);
 bool dfs(struct Graph* graph, int start, int end, bool visited[]);
-
 void afficherPaires(t_exclusion* exclusions);
 int sont_incompatibles(int sommet1, int sommet2, t_exclusion* exclusions);
 

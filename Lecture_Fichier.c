@@ -9,7 +9,6 @@
 struct Mat_adj* Creer_noeud(int value) {
     struct Mat_adj* noeud = (struct Mat_adj*)malloc(sizeof(struct Mat_adj));
     noeud->data = value;
-    noeud->poids = -1;
     noeud->next = NULL;
     return noeud;
 }
@@ -41,7 +40,7 @@ void printGraph(struct Graph* graph) {
         struct Mat_adj* adj= graph->adjList[i];
         printf("Sommets adjacents a %d :", i);
         while (adj != NULL) {
-            printf(" %d (%f)", adj->data, adj->poids);
+            printf(" %d ", adj->data);
             adj = adj->next;
         }
         printf("\n");

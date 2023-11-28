@@ -12,7 +12,7 @@ typedef struct{
 }Sommet;
 
 struct File {
-    Sommet* elements;
+    int* elements;
     int tete;
     int queue;
     int taille;
@@ -21,10 +21,10 @@ struct File {
 
 
 struct File* creerFile(int taille);
-Sommet dequeue(struct File* q);
-void FilePleine(struct File* q, Sommet element);
-Sommet* TrouverSommetsDepart(struct Graph* graph, int * nbSommetsDepart);
-int* CreerMatriceNiveaux(struct Graph* graph, Sommet * sommetsDepart, int nbSommetsDeparts, Sommet*** matriceNiveaux);
-void printMatriceNiveaux(Sommet ** matriceNiveaux, int nbSommet, int niveau);
+int dequeue(struct File* q);
+void FilePleine(struct File* q, int element);
+int* TrouverSommetsDepart(struct Graph* graph, int * nbSommetsDepart);
+int* CreerMatriceNiveaux(struct Graph* graph, int nbSommetsDeparts, int*** matriceNiveaux, int* SommetsDepart);
+void printMatriceNiveaux(int ** matriceNiveaux, int nbSommet, int niveau);
 
 #endif //PROJETTG_MATRICENIVEAU_H

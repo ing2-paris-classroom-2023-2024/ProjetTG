@@ -11,21 +11,21 @@ int main(){
     float* duree_operations = malloc(nbOperations * sizeof(float));
     struct Graph* graphe = initGraph();
     int nb_sommets_depart=0;
-    Sommet * sommetsDepart = TrouverSommetsDepart(graphe, &nb_sommets_depart);
+    int * sommetsDepart = TrouverSommetsDepart(graphe, &nb_sommets_depart);
     printf("\n\nOperations :\n\n");
     init_operations(nbOperations, num_operations, duree_operations, graphe);
     printGraph(graphe);
-    print_operations(nbOperations, num_operations, duree_operations);
-    Sommet **matriceNiveaux;
-    int *niveau = CreerMatriceNiveaux(graphe, sommetsDepart, nb_sommets_depart, &matriceNiveaux);
+    //print_operations(nbOperations, num_operations, duree_operations);
+    int **matriceNiveaux;
+    int *niveau = CreerMatriceNiveaux(graphe,  nb_sommets_depart, &matriceNiveaux,sommetsDepart);
     //t_sommets sommets;
     printf("\nMatrice des niveaux :\n\n");
     printMatriceNiveaux(matriceNiveaux, graphe->nbSommet, *niveau);
     t_exclusion * exclusions = lireExclusions();
     //afficherPaires(exclusions);
-    /*comparerExclusionsAvecMatriceNiveaux(graphe, &matriceNiveaux,niveau, graphe->nbSommet, exclusions);
+    comparerExclusionsAvecMatriceNiveaux(graphe, &matriceNiveaux,niveau, graphe->nbSommet, exclusions);
     printf("\nMatrice des niveaux avec exclusions :\n\n");
-    printMatriceNiveaux(matriceNiveaux, graphe->nbSommet, *niveau);*/
+    printMatriceNiveaux(matriceNiveaux, graphe->nbSommet, *niveau);
 
     /*printf("affichage des sommets");
     sommets = MAJ_sommets(matriceNiveaux,graphe->nbSommet,*niveau,num_operations,duree_operations,nbOperations);
