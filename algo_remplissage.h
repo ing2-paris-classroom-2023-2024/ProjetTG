@@ -10,6 +10,8 @@
 #include "Exclusions.h"
 
 
+void mise_a_jour_liste_sommets_disponibles(int **matriceNiveaux, int* list_sommets,int nbSommets_total, int nbSommets_matrice, int nbNiveaux, int *sommetsDisponibles,
+                                           int *nbSommetsDisponibles);
 
 
 #endif //PROJETTG_ALGO_REMPLISSAGE_H

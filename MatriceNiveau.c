@@ -58,7 +58,6 @@ Sommet* TrouverSommetsDepart(struct Graph* graph, int * nbSommetsDepart) {
             temp = temp->next;
         }
     }
-
     // Compter et créer le tableau des sommets de départ
     for (int i = 0; i < graph->nbSommet; ++i) {
         // Un sommet est un sommet de départ s'il n'est pas une destination et a des successeurs
@@ -155,7 +154,7 @@ int* CreerMatriceNiveaux(struct Graph* graph, Sommet * sommetsDepart, int nbSomm
                 temp = temp->next;
             }
         }
-        (*niveau)++;
+        (niveau)++;
         matriceIndex = 0;
     }
     free(visited);
