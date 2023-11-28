@@ -14,12 +14,13 @@ typedef struct{
     int nbSommets;
 }graphe;
 
+//mettre à jour les sommets disponibles
 void mise_a_jour_liste_sommets_disponibles(int **matriceNiveaux, int* list_sommets,int nbSommets_total, int nbSommets_matrice, int nbNiveaux, int *sommetsDisponibles,
                                            int *nbSommetsDisponibles) {
     *nbSommetsDisponibles = 0;
     for (int i = 0; i < nbSommets_total; ++i) {
         int trouve = 0;
-        for (int j = 0; j < nbNiveaux; ++j) {
+        for (int j = 0; j < nbNiveaux; ++j ) {
             for (int k = 0; k < nbSommets_matrice; ++k) {
                 if (matriceNiveaux[j][k] == list_sommets[i]) {
                     trouve = 1;
