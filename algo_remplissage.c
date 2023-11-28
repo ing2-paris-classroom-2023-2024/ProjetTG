@@ -14,7 +14,7 @@ typedef struct{
     int nbSommets;
 }graphe;
 
-//mettre à jour les sommets disponibles
+//mettre à jour les sommets disponibless
 void mise_a_jour_liste_sommets_disponibles(int **matriceNiveaux, int* list_sommets,int nbSommets_total, int nbSommets_matrice, int nbNiveaux, int *sommetsDisponibles,
                                            int *nbSommetsDisponibles) {
     *nbSommetsDisponibles = 0;
