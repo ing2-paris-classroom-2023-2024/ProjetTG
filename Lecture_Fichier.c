@@ -24,6 +24,7 @@ struct Graph* CreerGraph(int nbSommet) {
 }
 
 
+
 void CreerArrete(struct Graph* graph, int src, int dest) {
     struct Mat_adj* noeud = Creer_noeud(dest);
     noeud->next = graph->adjList[src];
@@ -60,12 +61,12 @@ struct Graph* initGraph() {
         if (dest > nbArrete) nbArrete = dest;
     }
     fseek(file, 0, SEEK_SET);
-    struct Graph* graph = CreerGraph(nbArrete + 1);
+    struct Graph *graph = CreerGraph(nbArrete + 1);
     while (fscanf(file, "%d %d", &src, &dest) == 2) {
         CreerArrete(graph, src, dest);
     }
     fclose(file);
-    printGraph(graph);
+    //printGraph(graph);
     return graph;
 }
 
@@ -142,7 +143,7 @@ void init_operations(int nbOperations, int* num_operations, float* duree_operati
         duree_operations[i] = dest;
         i++;
 
-        // Parcours des listes d'adjacence du graphe
+        // Parcours des listes d'adjacence du graphe_r
         for (int j = 0; j < g->nbSommet; ++j) {
             struct Mat_adj* temp = g->adjList[j];
             while (temp != NULL) {
