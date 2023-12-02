@@ -137,10 +137,9 @@ void init_operations(int nbOperations, int* num_operations, float* duree_operati
     int src;
     float dest;
     int i = 0;
-
     while (fscanf(file, "%d %f", &src, &dest) == 2) {
-        num_operations[src] = src;
-        duree_operations[src] = dest;
+        num_operations[i] = src;
+        duree_operations[i] = dest;
         i++;
     }
     fclose(file);
