@@ -10,8 +10,7 @@
 #include "Exclusions.h"
 
 
-int mise_a_jour_liste_sommets_disponibles(int **matriceNiveaux, int* list_sommets,int nbSommets_total, int nbNiveaux, int *sommetsDisponibles);
-void remplir_niveaux(int **matriceNiveaux, int* list_sommets, int nbSommets_total, float* liste_duree, int* nbNiveaux, float duree_max_niveau, t_exclusion* exclusions, int nbSommets_nivau_matrice);
+int trouver_indice(int Atrouver, int *tab_sommets, int nbSommets);
+int** remplissage_stations(int** matrice_niveau, float duree_max, int* taille_matrice, float *liste_duree, int* list_sommets, int nbSommets_total, t_exclusion* exclusions);
 
-//void creer_graphe(struct Graph* graphe, int** matriceNiveaux, int nbNiveaux, int nbSommets_matrice, int nbSommets_total, float* duree_operations, t_exclusion* exclusions);
 #endif //PROJETTG_ALGO_REMPLISSAGE_H

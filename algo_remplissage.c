@@ -1,4 +1,3 @@
-//
 // Created by Gabriel Gasnier on 18/11/2023.
 // Copyright (c) 2023 All rights reserved.
 //
@@ -9,86 +8,62 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-//obtenir la liste des sommets disponibles
-int mise_a_jour_liste_sommets_disponibles(int **matriceNiveaux, int* list_sommets,int nbSommets_total, int nbNiveaux, int *sommetsDisponibles){
-    int nbSommets = 0;
-    int trouve[nbSommets_total];
-    //marquer les sommets disponibles
-    for (int i = 0; i < nbNiveaux; ++i) {
-        int j = 0;
-        while (matriceNiveaux[i][j] > 0){
-            for (int k = 0; k < nbSommets_total; ++k) {
-                trouve[k] = 0;
-                if (matriceNiveaux[i][j] == list_sommets[k]) {
-                    trouve[k] = 1;
-                }
-            }
-            j++;
+int trouver_indice(int Atrouver, int *tab_sommets, int nbSommets){
+    int indice = -1;
+    for(int i =0; i<nbSommets; i++){
+        if(Atrouver == tab_sommets[i]){
+            return i;
         }
     }
-    //remplir la liste des sommets disponibles
-    for (int i = 0; i < nbSommets_total; ++i) {
-        if (trouve[i] == 0){
-            sommetsDisponibles[nbSommets] = list_sommets[i];
-            nbSommets++;
-        }
-    }
-    printf("*******nbSommets : %d", nbSommets);
-    return nbSommets;
+    return indice;
 }
 
-
-void remplir_niveaux(int **matriceNiveaux, int *list_sommets, int nbSommets_total, float *liste_duree, int *nbNiveaux, float duree_max_niveau, t_exclusion *exclusions, int nbSommets_niveau_matrice) {
-    //initialisation
-    int *sommets_disponibles = malloc(nbSommets_total * sizeof(int));
-    int nb_sommets_disponibles = mise_a_jour_liste_sommets_disponibles(matriceNiveaux, list_sommets, nbSommets_total, *nbNiveaux, sommets_disponibles);
-    float duree_niveaux_matrice[nbSommets_total];
-    //calculer la duree de chaque niveau
-    for (int i = 0; i < *nbNiveaux; ++i) {
-        for (int j = 0; j < nbSommets_niveau_matrice; ++j) {
-            duree_niveaux_matrice[i] += liste_duree[matriceNiveaux[i][j]];
+int** remplissage_stations(int** matrice_niveau, float duree_max, int* taille_matrice, float *liste_duree, int* list_sommets, int nbSommets_total, t_exclusion* exclusions){
+    int** nouvelle_matrice = malloc((*taille_matrice)*sizeof(int*));
+    for (int i = 0; i < *taille_matrice; ++i) {
+        nouvelle_matrice[i] = malloc((*taille_matrice)*sizeof(int));
+        for (int j = 0; j < *taille_matrice; ++j) {
+            nouvelle_matrice[i][j] = -1;
         }
-        printf("\nduree niveau %d : %f", i, duree_niveaux_matrice[i]);
     }
 
-    //placer les sommets disponibles dans les niveaux
-    for (int i = 0; i < nb_sommets_disponibles; i++) {
-        int place = 0;
-        for (int j = 0; j < *nbNiveaux; j++) {
-            if (place == 0) {
-                //verif de la duree valide
-                if (duree_niveaux_matrice[j] + liste_duree[sommets_disponibles[i]] <= duree_max_niveau) {
-                    int k = 0;
-                    int incompatible = 0;
-                    //verif des incompatibilites
-                    while (matriceNiveaux[j][k] > 0) {
-                        if (sont_incompatibles(matriceNiveaux[j][k], sommets_disponibles[i], exclusions) == 0) {
-                            incompatible = 1;
-                            break;
-                        }
-                        k++;
-                    }
-                    //placer le sommet
-                    if (incompatible == 0) {
-                        matriceNiveaux[j][k] = sommets_disponibles[i];
-                        duree_niveaux_matrice[j] += liste_duree[sommets_disponibles[i]];
-                        place = 1;
-                        printf("\n%d a ete place dans le niveau %d", sommets_disponibles[i], j);
-                        break;
-                    }
+    int avancement_nouvelle_matrice_ligne = 0;
+    int avancement_nouvelle_matrice_colonne[*taille_matrice];
+    for(int i =0; i<(*taille_matrice); i++){
+        avancement_nouvelle_matrice_colonne[i]= 0;
+    }
+    for (int i = 0; i < *taille_matrice; ++i) {
+        int k = 0;
+        int incompatibilite_ligne = 0;
+        while (matrice_niveau[i][k] != -1){
+            int l = 0;
+            int incompatible = 0;
+            float duree = 0;
+            while (nouvelle_matrice[avancement_nouvelle_matrice_ligne][l] != -1){
+                if (sont_incompatibles(nouvelle_matrice[avancement_nouvelle_matrice_ligne][l], matrice_niveau[i][k], exclusions) == 1){
+                    incompatible = 1;
+                    break;
                 }
+                duree += liste_duree[trouver_indice(nouvelle_matrice[avancement_nouvelle_matrice_ligne][l], list_sommets, nbSommets_total)];
+                l++;
             }
-        }
 
-        //si le sommet n'a pas ete place, creer un nouveau niveau
-        if (place == 0) {
-            // créer un nouveau niveau
-            matriceNiveaux[*nbNiveaux][0] = sommets_disponibles[i];
-            duree_niveaux_matrice[*nbNiveaux] = liste_duree[i];
-            (*nbNiveaux)++;
+            if (incompatible == 0 && duree + liste_duree[trouver_indice(matrice_niveau[i][k], list_sommets, nbSommets_total)] <= duree_max){
+                nouvelle_matrice[avancement_nouvelle_matrice_ligne][avancement_nouvelle_matrice_colonne[avancement_nouvelle_matrice_ligne]] = matrice_niveau[i][k];
+                avancement_nouvelle_matrice_colonne[avancement_nouvelle_matrice_ligne]++;
+            }
+            else {
+                nouvelle_matrice[avancement_nouvelle_matrice_ligne+1][avancement_nouvelle_matrice_colonne[avancement_nouvelle_matrice_ligne+1]] = matrice_niveau[i][k];
+                avancement_nouvelle_matrice_colonne[avancement_nouvelle_matrice_ligne+1]++;
+                incompatibilite_ligne = 1;
+            }
+            k++;
+        }
+        if (incompatibilite_ligne == 1){
+            avancement_nouvelle_matrice_ligne++;
+
         }
     }
-
-    free(sommets_disponibles);
-    free(duree_niveaux_matrice);
+    *taille_matrice = avancement_nouvelle_matrice_ligne + 1;
+    return nouvelle_matrice;
 }
