@@ -128,7 +128,7 @@ int nb_operations(){
     return nbOperations;
 }
 
-void init_operations(int nbOperations, int* num_operations, float* duree_operations, struct Graph* g) {
+void init_operations(int nbOperations, int* num_operations, float* duree_operations) {
     FILE* file;
     file = fopen("../operations.txt", "r");
     if (file == NULL) {
@@ -139,25 +139,24 @@ void init_operations(int nbOperations, int* num_operations, float* duree_operati
     int i = 0;
 
     while (fscanf(file, "%d %f", &src, &dest) == 2) {
-        num_operations[i] = src;
-        duree_operations[i] = dest;
+        num_operations[src] = src;
+        duree_operations[src] = dest;
         i++;
-
-        // Parcours des listes d'adjacence du graphe_r
-        for (int j = 0; j < g->nbSommet; ++j) {
-            struct Mat_adj* temp = g->adjList[j];
-            while (temp != NULL) {
-                if (temp->data == src) {
-                    temp->poids = dest;
-                    break; // Vous pouvez sortir de la boucle une fois que vous avez trouvé le nœud correspondant
-                }
-                temp = temp->next;
-            }
-        }
     }
     fclose(file);
 }
 
+float lire_cycle(){
+    FILE* file;
+    file = fopen("../cycle.txt", "r");
+    float cycle = 0;
+    if (file == NULL) {
+        printf("Erreur lors de l'ouverture du fichier");
+    }
+    fscanf(file, "%f",&cycle);
+    fclose(file);
+    return cycle;
+}
 
 void print_operations(int nbOperations, int* num_operations, float* duree_operations){
     for (int i = 0; i < nbOperations; ++i) {

@@ -9,4 +9,7 @@ add_executable(ProjetTG main.c Lecture_Fichier.c
         MatriceNiveau.h
         MatriceNiveau.c algo_remplissage.c algo_remplissage.h
         Exclusions.c
-        Exclusions.h)
+        Exclusions.h
+        remplissage_newMat.c
+        remplissage_newMat.h
+        remplissage_newMat.h)

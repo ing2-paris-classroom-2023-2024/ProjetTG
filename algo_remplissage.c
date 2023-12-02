@@ -33,7 +33,7 @@ int mise_a_jour_liste_sommets_disponibles(int **matriceNiveaux, int* list_sommet
             nbSommets++;
         }
     }
-
+    printf("*******nbSommets : %d", nbSommets);
     return nbSommets;
 }
 
@@ -42,9 +42,7 @@ void remplir_niveaux(int **matriceNiveaux, int *list_sommets, int nbSommets_tota
     //initialisation
     int *sommets_disponibles = malloc(nbSommets_total * sizeof(int));
     int nb_sommets_disponibles = mise_a_jour_liste_sommets_disponibles(matriceNiveaux, list_sommets, nbSommets_total, *nbNiveaux, sommets_disponibles);
-    float *duree_niveaux_matrice = malloc(*nbNiveaux * sizeof(float));
-
-
+    float duree_niveaux_matrice[nbSommets_total];
     //calculer la duree de chaque niveau
     for (int i = 0; i < *nbNiveaux; ++i) {
         for (int j = 0; j < nbSommets_niveau_matrice; ++j) {
@@ -85,16 +83,9 @@ void remplir_niveaux(int **matriceNiveaux, int *list_sommets, int nbSommets_tota
         //si le sommet n'a pas ete place, creer un nouveau niveau
         if (place == 0) {
             // créer un nouveau niveau
+            matriceNiveaux[*nbNiveaux][0] = sommets_disponibles[i];
+            duree_niveaux_matrice[*nbNiveaux] = liste_duree[i];
             (*nbNiveaux)++;
-            int niveau = *nbNiveaux - 1;
-            matriceNiveaux[niveau] = malloc(nbSommets_niveau_matrice * sizeof(int));
-            for (int j = 0; j < nbSommets_niveau_matrice; j++) {
-                matriceNiveaux[niveau][j] = -1;
-            }
-            matriceNiveaux[niveau][0] = sommets_disponibles[i];
-            duree_niveaux_matrice = realloc(duree_niveaux_matrice, (*nbNiveaux) * sizeof(float));
-            duree_niveaux_matrice[niveau] = liste_duree[sommets_disponibles[i]];
-
         }
     }
 

@@ -92,7 +92,6 @@ int* CreerMatriceNiveaux(struct Graph* graph, int nbSommetsDeparts, int*** matri
     for (int i = 0; i < graph->nbSommet; ++i) {
         visited[i] = false;
     }
-
     struct File* q = creerFile(graph->nbSommet);
     // Choisissez un sommet de départ, ici nous choisissons 0
     for (int i = 0; i < nbSommetsDeparts; i++) {

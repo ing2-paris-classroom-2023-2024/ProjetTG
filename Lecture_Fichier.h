@@ -26,6 +26,7 @@ int nb_incompatibilites();
 int* init_incompatibilites(int nbIncompatibilites);
 void print_incompatibilites(int** incompatibilites, int nbIncompatibilites);
 int nb_operations();
-void init_operations(int nbOperations, int* num_operations, float* duree_operations, struct Graph* g);
+void init_operations(int nbOperations, int* num_operations, float* duree_operations);
+float lire_cycle();
 void print_operations(int nbOperations, int* num_operations, float* duree_operations);
 #endif //PROJETTG_LECTURE_FICHIER_H

@@ -19,32 +19,81 @@ void remplir_liste_sommets(int** MatriceNiveaux, int* liste_sommet, int nb_somme
         }
     }
 }
+
+void calculerPoidsNiveaux(int*** matriceNiveaux, int* niveau, int nbSommet, float* duree_op, float* poidsNiveaux, float cycle, struct Graph g) {
+    for (int i = 0; i < (*niveau); i++) {
+        float poids = 0;
+        for (int j = 0; j < nbSommet; j++) {
+                    int sommet = (*matriceNiveaux)[i][j];
+                    if (poids + duree_op[(*matriceNiveaux)[i][j]] > cycle) {
+                        descendreNiveauxSuivants(&g,matriceNiveaux,niveau,nbSommet,i,sommet);
+                    }else {
+                        poids += duree_op[(*matriceNiveaux)[i][j]];
+                    }
+                }
+        poidsNiveaux[i] = poids;
+        printf("\n%f", poidsNiveaux[i]);
+    }
+}
+
+#include <stdio.h>
+
+void comparerMatriceAvecTableau(int** matrice, int nbsommets, int* tableau) {
+    for (int i = 0; i < nbsommets; i++) {
+        for (int j = 0; j < nbsommets; j++){
+            int elementMatrice = matrice[i][j];
+            int present = 0; // Variable pour indiquer si l'élément est présent dans le tableau
+
+            for (int k = 0; k < nbsommets; k++) {
+                if (elementMatrice == tableau[k]) {
+                    present = 1;
+                    break; // Sort de la boucle dès qu'un élément est trouvé
+                }
+            }
+
+            if (!present) {
+                matrice[i][j] = -1; // Met l'élément à -1 s'il n'est pas présent dans le tableau
+            }
+        }
+    }
+}
+
+
 int main(){
-    int nbOperations = nb_operations();
-    int* num_operations = malloc(nbOperations * sizeof(int));
-    float* duree_operations = malloc(nbOperations * sizeof(float));
+
     struct Graph* graphe = initGraph();
+    int nbOperations = nb_operations();
+    int* num_operations = malloc(graphe->nbSommet * sizeof(int));
+    float* duree_operations = malloc(graphe->nbSommet * sizeof(float));
     int nb_sommets_depart=0;
     int * sommetsDepart = TrouverSommetsDepart(graphe, &nb_sommets_depart);
-    //printf("\n\nOperations :\n\n");
-    init_operations(nbOperations, num_operations, duree_operations, graphe);
-    //printGraph(graphe);
-    //print_operations(nbOperations, num_operations, duree_operations);
+
+    float cycle = lire_cycle();
+    printf("\n\nOperations :\n\n");
+
+    init_operations(nbOperations, num_operations, duree_operations);
+    print_operations(nbOperations, num_operations, duree_operations);
+
     int **matriceNiveaux;
+    float* poidsNiveaux = malloc(graphe->nbSommet * sizeof (float ));
     int *niveau = CreerMatriceNiveaux(graphe,  nb_sommets_depart, &matriceNiveaux,sommetsDepart);
-    //t_sommets sommets;
     printf("\nMatrice des niveaux :\n\n");
-    //printMatriceNiveaux(matriceNiveaux, graphe->nbSommet, *niveau);
+    printMatriceNiveaux(matriceNiveaux, graphe->nbSommet, *niveau);
+
+
+
     t_exclusion * exclusions = lireExclusions();
-    //afficherPaires(exclusions);
     comparerExclusionsAvecMatriceNiveaux(graphe, &matriceNiveaux,niveau, graphe->nbSommet, exclusions);
+    printf("\nMatrice des niveaux :\n\n");
+    printMatriceNiveaux(matriceNiveaux, graphe->nbSommet, *niveau);
+    calculerPoidsNiveaux(&matriceNiveaux, niveau, nbOperations, duree_operations,poidsNiveaux, cycle, *graphe);
+    comparerMatriceAvecTableau(matriceNiveaux,  nbOperations, num_operations);
     printf("\nMatrice des niveaux avec exclusions :\n\n");
-    //printMatriceNiveaux(matriceNiveaux, graphe->nbSommet, *niveau);
-
-
-
-
-
+    printMatriceNiveaux(matriceNiveaux, graphe->nbSommet, *niveau);
+    for(int i=0; i<(*niveau); i++){
+        printf("\n%f", poidsNiveaux[i]);
+    }
+/*
     int *list_sommets = malloc(graphe->nbSommet * sizeof(int));
     printf("\nListe des sommets :\n\n");
     //rempli le liste sommet a partir du graphe directement (pas de doublons)
@@ -55,17 +104,17 @@ int main(){
             nb_sommets++;
         }
     }
-    /*
+
     for (int i = 0; i < nb_sommets; ++i) {
         printf("\n%d ", list_sommets[i]);
-    }*/
+    }
     printf("Matrice des niveaux :\n\n");
     printMatriceNiveaux(matriceNiveaux, graphe->nbSommet, *niveau);
 
     remplir_niveaux(matriceNiveaux, num_operations, nbOperations, duree_operations, niveau, 10.0, exclusions, nb_sommets);
     printf("\nMatrice des niveaux apres remplissage:\n\n");
     printMatriceNiveaux(matriceNiveaux, graphe->nbSommet, *niveau);
-/*
+
     int nbSommetsDisponibles = 0;
     int *sommetsDisponibles = malloc(graphe->nbSommet * sizeof(int));
     mise_a_jour_liste_sommets_disponibles(matriceNiveaux, list_sommets, nb_sommets, nb_sommets, *niveau, sommetsDisponibles, &nbSommetsDisponibles);

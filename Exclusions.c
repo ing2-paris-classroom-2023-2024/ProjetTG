@@ -147,11 +147,11 @@ void comparerExclusionsAvecMatriceNiveaux(struct Graph* g, int*** matriceNiveaux
         }
         // Si les deux sommets sont au même niveau, descendre l'un d'eux
         if (niveauSommet1 != -1 && niveauSommet1 == niveauSommet2) {
-            if (sommet1 > sommet2) {
+            //Faire un truc pour comparer le poids du niveau de la matrice !
+            if (sommet1 < sommet2) {
                 descendreNiveauxSuivants(g, matriceNiveaux, niveau, nbSommet, niveauSommet1, sommet1);
             } else {
                 descendreNiveauxSuivants(g, matriceNiveaux, niveau, nbSommet,niveauSommet2, sommet2);
-
             }
         }
     }
