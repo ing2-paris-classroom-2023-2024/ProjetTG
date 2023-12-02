@@ -30,5 +30,5 @@ bool estPrecedent(struct Graph* graph, int sommet1, int sommet2);
 bool dfs(struct Graph* graph, int start, int end, bool visited[]);
 void afficherPaires(t_exclusion* exclusions);
 int sont_incompatibles(int sommet1, int sommet2, t_exclusion* exclusions);
-
+int sommet_incompatible_avec_un(int sommet, int* tableau_sommets, int taille_tableau, t_exclusion* exclusions);
 #endif //PROJETTG_EXCLUSIONS_H
