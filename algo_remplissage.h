@@ -10,10 +10,8 @@
 #include "Exclusions.h"
 
 
-void mise_a_jour_liste_sommets_disponibles(int **matriceNiveaux, int* list_sommets,int nbSommets_total, int nbSommets_matrice, int nbNiveaux, int *sommetsDisponibles,
-                                           int *nbSommetsDisponibles);
-float initialisation_remplissage_niveau(int* niveau, int* list_operations,int taille_list_op ,float* duree_opreations);
-void descente_graphe(int* sommets_disponible,int nbSommets, int* niveau,int taille_niveau, int* list_sommets, int nbSommets_total,float* duree_operations, float duree_max_niveau);
+int mise_a_jour_liste_sommets_disponibles(int **matriceNiveaux, int* list_sommets,int nbSommets_total, int nbNiveaux, int *sommetsDisponibles);
+void remplir_niveaux(int **matriceNiveaux, int* list_sommets, int nbSommets_total, float* liste_duree, int* nbNiveaux, float duree_max_niveau, t_exclusion* exclusions, int nbSommets_nivau_matrice);
 
 //void creer_graphe(struct Graph* graphe, int** matriceNiveaux, int nbNiveaux, int nbSommets_matrice, int nbSommets_total, float* duree_operations, t_exclusion* exclusions);
 #endif //PROJETTG_ALGO_REMPLISSAGE_H

@@ -4,129 +4,100 @@
 //
 
 #include "algo_remplissage.h"
+#include "Exclusions.h"
 #include <stdbool.h>
 #include <stdlib.h>
 #include <stdio.h>
 
-typedef struct{
-    float duree;
-    int* list_sommets;
-    int nbSommets;
-}graphe_r;
-
-//mettre à jour les sommets disponibless
-void mise_a_jour_liste_sommets_disponibles(int **matriceNiveaux, int* list_sommets,int nbSommets_total, int nbSommets_matrice, int nbNiveaux, int *sommetsDisponibles,
-                                           int *nbSommetsDisponibles) {
-    *nbSommetsDisponibles = 0;
-    for (int i = 0; i < nbSommets_total; ++i) {
-        int trouve = 0;
-        for (int j = 0; j < nbNiveaux; ++j ) {
-            for (int k = 0; k < nbSommets_matrice; ++k) {
-                if (matriceNiveaux[j][k] == list_sommets[i]) {
-                    trouve = 1;
-                    break;
-                }
-            }
-            }
-        if (trouve == 0) {
-            sommetsDisponibles[*nbSommetsDisponibles] = list_sommets[i];
-            *nbSommetsDisponibles = *nbSommetsDisponibles + 1;
-        }
-    }
-}
-
-float initialisation_remplissage_niveau(int* niveau, int* list_operations,int taille_list_op ,float* duree_opreations){
-    float duree_niveau = 0;
-    int i;
-    while (niveau[i] > 0){
-        for (int j = 0; j < taille_list_op; ++j) {
-            if (list_operations[j] == niveau[i]){
-                duree_niveau = duree_niveau + duree_opreations[j];
-            }
-        }
-    }
-    return duree_niveau;
-}
-
-
-
-
-void descente_graphe(int* sommets_disponible,int nbSommets, int* niveau,int taille_niveau, int* list_sommets, int nbSommets_total,float* duree_operations, float duree_max_niveau){
-
-    float duree_niveau_actuel = initialisation_remplissage_niveau(niveau,list_sommets,nbSommets_total,duree_operations);
-
-    graphe_r remplissage_actuel;
-    for (int i = 0; i < nbSommets; ++i) {
-        int sommet_actuel = sommets_disponible[i];
-        for (int j = 0; j < list_sommets; ++j) {
-            if ((list_sommets[j] == sommet_actuel) && (duree_max_niveau >= duree_niveau_actuel + duree_operations[sommet_actuel])){
-                remplissage_actuel.list_sommets[remplissage_actuel.nbSommets] = list_sommets[j];
-                remplissage_actuel.nbSommets = remplissage_actuel.nbSommets + 1;
-                remplissage_actuel.duree = remplissage_actuel.duree + duree_operations[sommet_actuel];
-                printf("sommet ajouté : %d", sommet_actuel);
-                printf("duree actuelle : %f", remplissage_actuel.duree);
-            }
-            else{
-                break;
-            }
-        }
-    }
-}
-
-
-
-/*void remplissage_graphe(int** matriceNiveaux, int nbNiveaux, int nbSommets_matrice, int* list_sommets, int nbSommets_total, float* duree_operations, int* niveau, int taille_niveau){
-
-    graphe_r meilleur_remplissage_actuel;
-    graphe_r dernier_remplissage;
-    meilleur_remplissage_actuel.list_sommets = malloc(nbSommets_total * sizeof(int));
-    dernier_remplissage.list_sommets = malloc(nbSommets_total * sizeof(int));
-
-}
-
-void creer_graphe(struct Graph* graphe_r, int** matriceNiveaux, int nbNiveaux, int nbSommets_matrice, int nbSommets_total, float* duree_operations, t_exclusion* exclusions) {
-    // Initialisation du graphe_r
-    graphe_r->adjList = (struct Mat_adj**)malloc(nbSommets_total * sizeof(struct Mat_adj*));
-    graphe_r->nbSommet = 0;
-    struct Mat_adj* Sommet= (struct Mat_adj*)malloc(sizeof(struct Mat_adj));
-    Sommet->data = matriceNiveaux[0][0];
-    Sommet->poids = duree_operations[matriceNiveaux[0][0]];
-    Sommet->next = NULL;
-
-    // Ajouter le nouveau sommet à la liste d'adjacence
-    graphe_r->adjList[graphe_r->nbSommet] = Sommet;
-    graphe_r->nbSommet++;
-
-    // Boucle sur les niveaux
+//obtenir la liste des sommets disponibles
+int mise_a_jour_liste_sommets_disponibles(int **matriceNiveaux, int* list_sommets,int nbSommets_total, int nbNiveaux, int *sommetsDisponibles){
+    int nbSommets = 0;
+    int trouve[nbSommets_total];
+    //marquer les sommets disponibles
     for (int i = 0; i < nbNiveaux; ++i) {
-        // Boucle sur les sommets du niveau
-        for (int j = 0; j < nbSommets_matrice; ++j) {
-            int sommet = matriceNiveaux[i][j];
-
-            // Vérifier l'incompatibilité avec les sommets déjà présents dans le graphe_r
-            int compatible = 1;
-            for (int k = 1; k < graphe_r->nbSommet; ++k) {
-                printf("Comparaison %d et %d : %d\n", sommet, graphe_r->adjList[k-1]->data, sont_incompatibles(sommet, graphe_r->adjList[k]->data, exclusions));
-                if (sont_incompatibles(sommet, graphe_r->adjList[k-1]->data, exclusions)) {
-                    compatible = 0;
-                    break;
+        int j = 0;
+        while (matriceNiveaux[i][j] > 0){
+            for (int k = 0; k < nbSommets_total; ++k) {
+                trouve[k] = 0;
+                if (matriceNiveaux[i][j] == list_sommets[k]) {
+                    trouve[k] = 1;
                 }
             }
-
-            // Si le sommet est compatible, l'ajouter au graphe_r
-            if (compatible) {
-                struct Mat_adj* nvSommet = (struct Mat_adj*)malloc(sizeof(struct Mat_adj));
-                nvSommet->data = sommet;
-                nvSommet->poids = duree_operations[sommet];
-                nvSommet->next = NULL;
-
-                // Ajouter le nouveau sommet à la liste d'adjacence
-                graphe_r->adjList[graphe_r->nbSommet] = nvSommet;
-                graphe_r->nbSommet++;
-
-                // Imprimer le sommet et sa durée
-                printf("%d %f\n", sommet, duree_operations[sommet]);
-            }
+            j++;
         }
     }
-}*/
+    //remplir la liste des sommets disponibles
+    for (int i = 0; i < nbSommets_total; ++i) {
+        if (trouve[i] == 0){
+            sommetsDisponibles[nbSommets] = list_sommets[i];
+            nbSommets++;
+        }
+    }
+
+    return nbSommets;
+}
+
+
+void remplir_niveaux(int **matriceNiveaux, int *list_sommets, int nbSommets_total, float *liste_duree, int *nbNiveaux, float duree_max_niveau, t_exclusion *exclusions, int nbSommets_niveau_matrice) {
+    //initialisation
+    int *sommets_disponibles = malloc(nbSommets_total * sizeof(int));
+    int nb_sommets_disponibles = mise_a_jour_liste_sommets_disponibles(matriceNiveaux, list_sommets, nbSommets_total, *nbNiveaux, sommets_disponibles);
+    float *duree_niveaux_matrice = malloc(*nbNiveaux * sizeof(float));
+
+
+    //calculer la duree de chaque niveau
+    for (int i = 0; i < *nbNiveaux; ++i) {
+        for (int j = 0; j < nbSommets_niveau_matrice; ++j) {
+            duree_niveaux_matrice[i] += liste_duree[matriceNiveaux[i][j]];
+        }
+        printf("\nduree niveau %d : %f", i, duree_niveaux_matrice[i]);
+    }
+
+    //placer les sommets disponibles dans les niveaux
+    for (int i = 0; i < nb_sommets_disponibles; i++) {
+        int place = 0;
+        for (int j = 0; j < *nbNiveaux; j++) {
+            if (place == 0) {
+                //verif de la duree valide
+                if (duree_niveaux_matrice[j] + liste_duree[sommets_disponibles[i]] <= duree_max_niveau) {
+                    int k = 0;
+                    int incompatible = 0;
+                    //verif des incompatibilites
+                    while (matriceNiveaux[j][k] > 0) {
+                        if (sont_incompatibles(matriceNiveaux[j][k], sommets_disponibles[i], exclusions) == 0) {
+                            incompatible = 1;
+                            break;
+                        }
+                        k++;
+                    }
+                    //placer le sommet
+                    if (incompatible == 0) {
+                        matriceNiveaux[j][k] = sommets_disponibles[i];
+                        duree_niveaux_matrice[j] += liste_duree[sommets_disponibles[i]];
+                        place = 1;
+                        printf("\n%d a ete place dans le niveau %d", sommets_disponibles[i], j);
+                        break;
+                    }
+                }
+            }
+        }
+
+        //si le sommet n'a pas ete place, creer un nouveau niveau
+        if (place == 0) {
+            // créer un nouveau niveau
+            (*nbNiveaux)++;
+            int niveau = *nbNiveaux - 1;
+            matriceNiveaux[niveau] = malloc(nbSommets_niveau_matrice * sizeof(int));
+            for (int j = 0; j < nbSommets_niveau_matrice; j++) {
+                matriceNiveaux[niveau][j] = -1;
+            }
+            matriceNiveaux[niveau][0] = sommets_disponibles[i];
+            duree_niveaux_matrice = realloc(duree_niveaux_matrice, (*nbNiveaux) * sizeof(float));
+            duree_niveaux_matrice[niveau] = liste_duree[sommets_disponibles[i]];
+
+        }
+    }
+
+    free(sommets_disponibles);
+    free(duree_niveaux_matrice);
+}

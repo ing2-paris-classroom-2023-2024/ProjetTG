@@ -41,6 +41,10 @@ int main(){
     printf("\nMatrice des niveaux avec exclusions :\n\n");
     //printMatriceNiveaux(matriceNiveaux, graphe->nbSommet, *niveau);
 
+
+
+
+
     int *list_sommets = malloc(graphe->nbSommet * sizeof(int));
     printf("\nListe des sommets :\n\n");
     //rempli le liste sommet a partir du graphe directement (pas de doublons)
@@ -51,11 +55,17 @@ int main(){
             nb_sommets++;
         }
     }
+    /*
     for (int i = 0; i < nb_sommets; ++i) {
         printf("\n%d ", list_sommets[i]);
-    }
+    }*/
+    printf("Matrice des niveaux :\n\n");
+    printMatriceNiveaux(matriceNiveaux, graphe->nbSommet, *niveau);
 
-
+    remplir_niveaux(matriceNiveaux, num_operations, nbOperations, duree_operations, niveau, 10.0, exclusions, nb_sommets);
+    printf("\nMatrice des niveaux apres remplissage:\n\n");
+    printMatriceNiveaux(matriceNiveaux, graphe->nbSommet, *niveau);
+/*
     int nbSommetsDisponibles = 0;
     int *sommetsDisponibles = malloc(graphe->nbSommet * sizeof(int));
     mise_a_jour_liste_sommets_disponibles(matriceNiveaux, list_sommets, nb_sommets, nb_sommets, *niveau, sommetsDisponibles, &nbSommetsDisponibles);
@@ -67,7 +77,7 @@ int main(){
     float duree_max_niveau = 0;
 
     //descente_graphe(sommetsDisponibles, nbSommetsDisponibles, niveau, graphe->nbSommet, list_sommets, graphe->nbSommet, duree_operations, duree_max_niveau);
-
+*/
 
     //free(incompatibilites);
     free(num_operations);
