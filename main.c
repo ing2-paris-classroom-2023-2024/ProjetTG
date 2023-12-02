@@ -87,7 +87,7 @@ int main(){
     printf("\nMatrice des niveaux :\n\n");
     printMatriceNiveaux(matriceNiveaux, graphe->nbSommet, *niveau);
     calculerPoidsNiveaux(&matriceNiveaux, niveau, nbOperations, duree_operations,poidsNiveaux, cycle, *graphe);
-    comparerMatriceAvecTableau(matriceNiveaux,  nbOperations, num_operations);
+    //comparerMatriceAvecTableau(matriceNiveaux,  nbOperations, num_operations);
     printf("\nMatrice des niveaux avec exclusions :\n\n");
     printMatriceNiveaux(matriceNiveaux, graphe->nbSommet, *niveau);
     for(int i=0; i<(*niveau); i++){
