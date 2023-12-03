@@ -21,8 +21,10 @@ typedef struct {
     int nb_paires;
 } t_exclusion;
 
-
+int compterSommets();
 t_exclusion* lireExclusions();
+bool estCompatible(int sommet, int* groupe, int tailleGroupe, t_exclusion* exclusions);
+
 void descendreNiveauxSuivants(struct Graph* g, int*** matriceNiveaux, int* niveau, int nbSommet, int niveauDebut, int sommetADescendre);
 void comparerExclusionsAvecMatriceNiveaux(struct Graph* g, int*** matriceNiveaux, int* niveau, int nbSommet, t_exclusion* exclusions);
 bool estPrecedentALigne(struct Graph* graph, int sommet, int** matriceNiveaux, int ligneIndex, int nbSommets);

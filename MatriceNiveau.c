@@ -78,58 +78,54 @@ int* TrouverSommetsDepart(struct Graph* graph, int * nbSommetsDepart) {
 }
 
 
-int* CreerMatriceNiveaux(struct Graph* graph, int nbSommetsDeparts, int*** matriceNiveaux, int* SommetsDepart) {
-    // Allouer de l'espace pour la matrice de structures Sommet
-    (*matriceNiveaux) = malloc(graph->nbSommet * sizeof(int *));
-    for (int i = 0; i < graph->nbSommet; ++i) {
-        (*matriceNiveaux)[i] = malloc(graph->nbSommet * sizeof(int));
-        for (int j = 0; j < graph->nbSommet; ++j) {
-            // Initialisez les valeurs de la structure Sommet si nécessaire
-            (*matriceNiveaux)[i][j]= -1;
-        }
-    }
-    bool* visited = malloc(graph->nbSommet * sizeof(bool));
-    for (int i = 0; i < graph->nbSommet; ++i) {
+// Fonctions simplifiées
+void initialiserVisited(bool* visited, int nbSommet) {
+    for (int i = 0; i < nbSommet; ++i) {
         visited[i] = false;
     }
-    struct File* q = creerFile(graph->nbSommet);
-    // Choisissez un sommet de départ, ici nous choisissons 0
-    for (int i = 0; i < nbSommetsDeparts; i++) {
-        int sommet;
-        sommet = SommetsDepart[i];
-        FilePleine(q, sommet);
+}
+
+void initialiserMatriceNiveaux(int*** matriceNiveaux, int nbSommet) {
+    *matriceNiveaux = malloc(nbSommet * sizeof(int *));
+    for (int i = 0; i < nbSommet; ++i) {
+        (*matriceNiveaux)[i] = malloc(nbSommet * sizeof(int));
+        for (int j = 0; j < nbSommet; ++j) {
+            (*matriceNiveaux)[i][j] = -1;
+        }
+    }
+}
+
+void ajouterSommetsDepartFile(struct File* q, bool* visited, int* SommetsDepart, int nbSommetsDeparts) {
+    for (int i = 0; i < nbSommetsDeparts; ++i) {
+        FilePleine(q, SommetsDepart[i]);
         visited[SommetsDepart[i]] = true;
     }
-    int* predecesseurs = calloc(graph->nbSommet, sizeof(int));
+}
 
-    // Parcourir toutes les arêtes pour compter les prédécesseurs
+void compterPredecesseurs(struct Graph* graph, int* predecesseurs) {
     for (int i = 0; i < graph->nbSommet; ++i) {
         struct Mat_adj* temp = graph->adjList[i];
         while (temp != NULL) {
             predecesseurs[temp->data]++;
             temp = temp->next;
-
         }
     }
-    int* niveau = malloc(sizeof(int));
-    *niveau = 0;
+}
+
+void traiterSommetsFile(struct File* q, bool* visited, int*** matriceNiveaux, int* predecesseurs, struct Graph* graph, int* niveau) {
     int matriceIndex = 0;
     while (!FileVide(q)) {
         int size = q->queue - q->tete + 1;
-        for (int i = 0; i < size; i++) {
+        for (int i = 0; i < size; ++i) {
             int sommet = dequeue(q);
-            (*matriceNiveaux)[*niveau][matriceIndex] = sommet;
-            matriceIndex++;
+            (*matriceNiveaux)[*niveau][matriceIndex++] = sommet;
             struct Mat_adj* temp = graph->adjList[sommet];
             while (temp) {
                 int adjSommet = temp->data;
                 predecesseurs[adjSommet]--;
                 if (predecesseurs[adjSommet] == 0 && !visited[adjSommet]) {
                     visited[adjSommet] = true;
-                    int adj;
-                    adj = adjSommet;
-                    FilePleine(q, adj);
-
+                    FilePleine(q, adjSommet);
                 }
                 temp = temp->next;
             }
@@ -137,22 +133,41 @@ int* CreerMatriceNiveaux(struct Graph* graph, int nbSommetsDeparts, int*** matri
         (*niveau)++;
         matriceIndex = 0;
     }
+}
+
+int* CreerMatriceNiveaux(struct Graph* graph, int nbSommetsDeparts, int*** matriceNiveaux, int* SommetsDepart) {
+    bool* visited = malloc(graph->nbSommet * sizeof(bool));
+    initialiserVisited(visited, graph->nbSommet);
+    initialiserMatriceNiveaux(matriceNiveaux, graph->nbSommet);
+
+    struct File* q = creerFile(graph->nbSommet);
+    ajouterSommetsDepartFile(q, visited, SommetsDepart, nbSommetsDeparts);
+
+    int* predecesseurs = calloc(graph->nbSommet, sizeof(int));
+    compterPredecesseurs(graph, predecesseurs);
+
+    int* niveau = malloc(sizeof(int));
+    *niveau = 0;
+    traiterSommetsFile(q, visited, matriceNiveaux, predecesseurs, graph, niveau);
+
     free(visited);
     return niveau;
 }
 
 
+
 void printMatriceNiveaux(int ** matriceNiveaux, int nbSommet, int niveau) {
-    printf("Matrice des niveaux :\n");
     for (int i = 0; i < niveau; ++i) {
         printf("Niveau %d :", i);
         for (int j = 0; j < nbSommet; ++j) {
-            if (matriceNiveaux[i][j] > 0 && matriceNiveaux[i][j] < 10000) {
-                printf(" %d ", matriceNiveaux[i][j]);
-            }
-            else{
-                break;
-            }
+            if (matriceNiveaux[i][j] != -1) {
+                if (matriceNiveaux[i][j] > 0 && matriceNiveaux[i][j] < 10000) {
+                    printf(" %d ", matriceNiveaux[i][j]);
+                }
+                else{
+                    break;
+                }
+        }
     }printf("\n");
 }
 }

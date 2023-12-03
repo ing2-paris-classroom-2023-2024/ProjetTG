@@ -15,6 +15,7 @@ t_exclusion* lireExclusions() {
         perror("Erreur lors de l'ouverture du fichier d'exclusions");
         return NULL;
     }
+
     t_exclusion* exclusions = malloc(sizeof(t_exclusion));
     exclusions->paires = malloc(100 * sizeof(t_paireExclusion));  // Taille initiale
     exclusions->nb_paires = 0;
@@ -166,14 +167,4 @@ int sont_incompatibles(int sommet1, int sommet2, t_exclusion* exclusions) {
     }
     return 0;
 }
-
-int sommet_incompatible_avec_un(int sommet, int* tableau_sommets, int taille_tableau, t_exclusion* exclusions) {
-    for (int i = 0; i < taille_tableau; i++) {
-        if (sont_incompatibles(sommet, tableau_sommets[i], exclusions)) {
-            return 1; // Le sommet est incompatible avec au moins un sommet dans le tableau
-        }
-    }
-    return 0; // Le sommet n'est incompatible avec aucun sommet dans le tableau
-}
-
 

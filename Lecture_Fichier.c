@@ -144,6 +144,23 @@ void init_operations(int nbOperations, int* num_operations, float* duree_operati
     }
     fclose(file);
 }
+void init_operationsDemo(int nbOperations, int* num_operations, float* duree_operations) {
+    FILE* file;
+    file = fopen("../operations.txt", "r");
+    if (file == NULL) {
+        printf("Erreur lors de l'ouverture du fichier");
+    }
+    int src;
+    float dest;
+    int i = 0;
+    while (fscanf(file, "%d %f", &src, &dest) == 2) {
+        num_operations[src] = src;
+        duree_operations[src] = dest;
+        i++;
+    }
+    fclose(file);
+}
+
 
 float lire_cycle(){
     FILE* file;
