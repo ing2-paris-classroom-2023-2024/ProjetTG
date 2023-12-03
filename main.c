@@ -5,19 +5,6 @@
 #include "Exclusions.h"
 #include "algo_remplissage.h"
 
-//remplir une liste de tous les sommets de la matrice
-void remplir_liste_sommets(int** MatriceNiveaux, int* liste_sommet, int nb_sommet, int niveau){
-    int k = 0;
-    for (int i = 0; i < niveau; ++i) {
-        for (int j = 0; j < nb_sommet; ++j) {
-
-            if ((MatriceNiveaux[i][j] != -1)&& (MatriceNiveaux[i][j] != 0)){
-                liste_sommet[k] = MatriceNiveaux[i][j];
-                k++;
-            }
-        }
-    }
-}
 
 
 
@@ -35,6 +22,17 @@ void calculerPoidsNiveaux(int*** matriceNiveaux, int* niveau, int nbSommet, floa
         poidsNiveaux[i] = poids;
     }
 }
+void affichage_poids_niveau(int** MatriceNiveaux, int niveau, int nb_sommet, float* liste_duree, int* liste_sommet, int nb_operations){
+    float poids = 0;
+    for (int i = 0; i < nb_sommet; ++i) {
+        if (MatriceNiveaux[niveau][i] != -1){
+            poids += liste_duree[trouver_indice(MatriceNiveaux[niveau][i], liste_sommet, nb_operations)];
+        }
+    }
+    printf("%f",poids);
+}
+
+
 
 int main(){
 
@@ -86,6 +84,11 @@ int main(){
     printf("\n\nnouvelle matrice\n");
     int** nouvelle_matrice = remplissage_stations(matriceNiveaux, cycle, niveau, duree_operations, num_operations, nbOperations, exclusions);
     printMatriceNiveaux(nouvelle_matrice, graphe->nbSommet, *niveau);
+    for(int i=0; i<(*niveau); i++){
+        printf("\nniveau : %d   poids :",i);
+        affichage_poids_niveau(nouvelle_matrice, i, graphe->nbSommet, duree_operations, num_operations, nbOperations);
+    }
+
 
 
 

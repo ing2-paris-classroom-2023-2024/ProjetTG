@@ -63,6 +63,7 @@ int** remplissage_stations(int** matrice_niveau, float duree_max, int* taille_ma
             avancement_nouvelle_matrice_ligne++;
 
         }
+
     }
     *taille_matrice = avancement_nouvelle_matrice_ligne + 1;
     return nouvelle_matrice;
