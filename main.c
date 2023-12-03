@@ -12,13 +12,13 @@ void calculerPoidsNiveaux(int*** matriceNiveaux, int* niveau, int nbSommet, floa
     for (int i = 0; i < (*niveau); i++) {
         float poids = 0;
         for (int j = 0; j < nbSommet; j++) {
-                    int sommet = (*matriceNiveaux)[i][j];
-                    if (poids + duree_op[(*matriceNiveaux)[i][j]] > cycle) {
-                        descendreNiveauxSuivants(&g,matriceNiveaux,niveau,nbSommet,i,sommet);
-                    }else {
-                        poids += duree_op[(*matriceNiveaux)[i][j]];
-                    }
-                }
+            int sommet = (*matriceNiveaux)[i][j];
+            if (poids + duree_op[(*matriceNiveaux)[i][j]] > cycle) {
+                descendreNiveauxSuivants(&g,matriceNiveaux,niveau,nbSommet,i,sommet);
+            }else {
+                poids += duree_op[(*matriceNiveaux)[i][j]];
+            }
+        }
         poidsNiveaux[i] = poids;
     }
 }
@@ -65,7 +65,7 @@ int main(){
     printMatriceNiveaux(matriceNiveauxDemo, graphe->nbSommet, *niveauDemo);
     printf("\n****Poids des Niveaux***\n");
     for(int i=0; i<(*niveauDemo); i++){
-        printf("\nStation : %d   poids :  %f",i+1, poidsNiveauxDemo[i]);
+        printf("\nniveau : %d   poids :  %f",i, poidsNiveauxDemo[i]);
     }
 
     free(matriceNiveauxDemo);
