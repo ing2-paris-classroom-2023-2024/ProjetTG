@@ -158,7 +158,7 @@ int* CreerMatriceNiveaux(struct Graph* graph, int nbSommetsDeparts, int*** matri
 
 void printMatriceNiveaux(int ** matriceNiveaux, int nbSommet, int niveau) {
     for (int i = 0; i < niveau; ++i) {
-        printf("Niveau %d :", i);
+        printf("Station %d :", i+1);
         for (int j = 0; j < nbSommet; ++j) {
             if (matriceNiveaux[i][j] != -1) {
                 if (matriceNiveaux[i][j] > 0 && matriceNiveaux[i][j] < 10000) {

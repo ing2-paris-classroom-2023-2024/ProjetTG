@@ -22,8 +22,6 @@ void CreerArrete(struct Graph* graph, int src, int dest);
 int est_un_sommet(struct Graph* graph, int i);
 void printGraph(struct Graph* graph);
 struct Graph* initGraph();
-int nb_incompatibilites();
-int* init_incompatibilites(int nbIncompatibilites);
 void print_incompatibilites(int** incompatibilites, int nbIncompatibilites);
 int nb_operations();
 void init_operations(int nbOperations, int* num_operations, float* duree_operations);

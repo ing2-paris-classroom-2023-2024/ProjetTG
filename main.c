@@ -67,7 +67,7 @@ int main(){
     printMatriceNiveaux(matriceNiveauxDemo, graphe->nbSommet, *niveauDemo);
     printf("\n****Poids des Niveaux***\n");
     for(int i=0; i<(*niveauDemo); i++){
-        printf("\nniveau : %d   poids :  %f",i, poidsNiveauxDemo[i]);
+        printf("\nStation : %d   poids :  %f",i+1, poidsNiveauxDemo[i]);
     }
 
     free(matriceNiveauxDemo);

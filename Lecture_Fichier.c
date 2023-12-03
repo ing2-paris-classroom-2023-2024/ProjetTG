@@ -70,43 +70,6 @@ struct Graph* initGraph() {
     return graph;
 }
 
-int nb_incompatibilites(){
-    FILE *file;
-    file = fopen("../exclusions.txt", "r");
-    if (file == NULL) {
-        printf("Erreur lors de l'ouverture du fichier");
-    }
-    int nbIncompatibilites = 0;
-    int src, dest;
-    while (fscanf(file, "%d %d", &src, &dest) == 2) {
-        nbIncompatibilites++;
-    }
-    fclose(file);
-    return nbIncompatibilites;
-}
-
-int* init_incompatibilites(int nbIncompatibilites){
-    FILE *file;
-    file = fopen("../exclusions.txt", "r");
-    if (file == NULL) {
-        printf("Erreur lors de l'ouverture du fichier");
-    }
-    int src, dest;
-    int** incompatibilites = malloc(nbIncompatibilites * sizeof(int*));
-    for (int i = 0; i < nbIncompatibilites; ++i) {
-        incompatibilites[i] = malloc(2 * sizeof(int));
-    }
-    int i = 0;
-    while (fscanf(file, "%d %d", &src, &dest) == 2) {
-        incompatibilites[i][0] = src;
-        incompatibilites[i][1] = dest;
-        i++;
-    }
-    fclose(file);
-
-    return (int *) incompatibilites;
-}
-
 void print_incompatibilites(int** incompatibilites, int nbIncompatibilites){
     for (int i = 0; i < nbIncompatibilites; ++i) {
         printf("%d %d\n", incompatibilites[i][0], incompatibilites[i][1]);
